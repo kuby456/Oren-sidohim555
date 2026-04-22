@@ -355,8 +355,8 @@ display: flex;
   <main class="page">
     
     <div class="cards">
-      <div class="card" >
-        <div class="card-img">👤</div>
+<div class="card" data-link="html2.html">
+          <div class="card-img">👤</div>
         <div class="card-body">
          <i class="saveBtn fa-regular fa-heart"></i>  
           <div style="position: absolute; left: 0; top: 20px; text-align: center; margin-left: 40px; ">
@@ -367,8 +367,7 @@ display: flex;
       </div>
     </div>
   </main>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 <script>
 const supabase = window.supabase.createClient(
   "https://mgybwqpcrismnnfxizwe.supabase.co",
@@ -415,7 +414,9 @@ hearts.forEach(heart => {
 
 });
     
-    async function signInWithGoogle() {
+async function signInWithGoogle() {
+  console.log("נלחץ כפתור");
+
   await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
