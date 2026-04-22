@@ -355,8 +355,8 @@ display: flex;
   <main class="page">
     
     <div class="cards">
-<div class="card" data-link="html2.html">
-          <div class="card-img">👤</div>
+      <div class="card" >
+        <div class="card-img">👤</div>
         <div class="card-body">
          <i class="saveBtn fa-regular fa-heart"></i>  
           <div style="position: absolute; left: 0; top: 20px; text-align: center; margin-left: 40px; ">
@@ -367,16 +367,41 @@ display: flex;
       </div>
     </div>
   </main>
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-<script>
-const supabase = window.supabase.createClient(
-  "https://mgybwqpcrismnnfxizwe.supabase.co",
-  "sb_publishable_fQzZ5TohOxEWLpnEeogRgg_FEepnXB7"
-);
-</script>
+    
     
     <script>
-    
+   
+function loadSupabaseAndInit(callback) {
+  const script = document.createElement("script");
+  script.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+
+  script.onload = () => {
+    const supabase = window.supabase.createClient(
+      "https://mgybwqpcrismnnfxizwe.supabase.co",
+      "sb_publishable_fQzZ5TohOxEWLpnEeogRgg_FEepnXB7",
+      {
+        auth: {
+          persistSession: true,
+          autoRefreshToken: true,
+          detectSessionInUrl: true
+        }
+      }
+    );
+
+    callback(supabase);
+  };
+
+  document.head.appendChild(script);
+}
+
+// שימוש
+loadSupabaseAndInit((supabase) => {
+  console.log("Supabase מוכן");
+
+  // דוגמה
+  window.supabaseClient = supabase;
+});
+
     function openSidebar() {
       document.getElementById("sidebar").classList.add("open");
       document.getElementById("overlay").classList.add("show");
@@ -414,9 +439,7 @@ hearts.forEach(heart => {
 
 });
     
-async function signInWithGoogle() {
-  console.log("נלחץ כפתור");
-
+    async function signInWithGoogle() {
   await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
