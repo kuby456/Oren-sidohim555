@@ -418,14 +418,26 @@ hearts.forEach(heart => {
     async function signInWithGoogle() {
   await supabase.auth.signInWithOAuth({
     provider: "google",
+    options: {
+      redirectTo: window.location.origin
+    }
   });
+}
+    
+    function showUser(user) {
+  const container = document.querySelector(".span654");
+
+  container.innerHTML = `
+    <img src="${user.user_metadata.avatar_url}" 
+         style="width:40px;height:40px;border-radius:50%">
+    <span class="span6548">${user.user_metadata.full_name}</span>
+  `;
 }
     async function checkUser() {
   const { data } = await supabase.auth.getUser();
 
   if (data.user) {
-    console.log("מחובר:", data.user);
-    // פה בהמשך תשנה UI (תמונה/שם)
+    showUser(data.user);
   }
 }
 
