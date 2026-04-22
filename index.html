@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <title>לב נאמן</title>
 
   <style>
@@ -192,11 +193,13 @@
       overflow: hidden;
       box-shadow: 0 4px 14px rgba(0,0,0,0.08);
       border: 1px solid #eee2d8;
+      position: relative;
+      
     }
 
     .card-img {
-      width: 100%;
-      height: 190px;
+      width: 100px;
+      height: 100px;
       background: linear-gradient(135deg, #d9b8a0, #f2dfcf, #cda98b);
       display: flex;
       align-items: center;
@@ -204,9 +207,7 @@
       font-size: 50px;
     }
 
-    .card-body {
-      padding: 14px;
-    }
+    
 
     .card-name {
       font-size: 22px;
@@ -219,6 +220,7 @@
       font-size: 14px;
       color: #6d6d6d;
       margin-bottom: 10px;
+      
     }
 
     .card-text {
@@ -228,27 +230,10 @@
       color: #333;
     }
 
-    .tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 14px;
-    }
+   
+    
 
-    .tag {
-      background: #f1e2d7;
-      color: #6f3d3d;
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-size: 13px;
-      font-weight: bold;
-    }
-
-    .card-actions {
-      display: flex;
-      gap: 10px;
-    }
-
+   
     .btn {
       flex: 1;
       border: none;
@@ -268,55 +253,52 @@
       background: #efe3d8;
       color: #5c3434;
     }
-   
   .topbar-icons {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  padding: 5px 0 18px;
-    gap: 30px;
+  padding: 8px 0 12px;
 }
 
-/* בסיס */
 .icon {
-  width: 26px;
-  height: 26px;
-  fill: none;
-  stroke-width: 2;
+  width: 22px;
+  height: 22px;
+  fill: white;
   cursor: pointer;
-  transition: 0.25s ease;
+  transition: 0.2s;
 }
 
-/* צבעים אמיתיים */
-.heart {
-  stroke: #ff4d6d;
-}
-
-.star {
-  stroke: #f7b500;
-}
-
-.chat {
-  stroke: #4dabf7;
-}
-
-.user {
-  stroke: #51cf66;
-}
-
-.location {
-  stroke: #845ef7;
-}
-
-/* חיים */
 .icon:hover {
-  transform: scale(1.2) rotate(3deg);
-  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3));
+  transform: scale(1.15);
+  opacity: 0.8;
+}
+  
+  #saveBtn {
+  font-size: 24px;
+  cursor: pointer;
+  color: #bbb;
+  transition: 0.3s;
+    position: absolute;
+    left: 10px; top: 8px;
 }
 
-/* קליק */
-.icon:active {
-  transform: scale(0.9);
+#saveBtn.active {
+  color: red;
+  transform: scale(1.2);
+}
+  
+  #saveBtn {
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+#saveBtn:focus {
+  outline: none;
+}
+
+#saveBtn:active {
+  outline: none;
 }
   </style>
 </head>
@@ -335,32 +317,16 @@
       <button class="menu-btn">❤</button>
     </div>
 
-    
-  <div class="topbar-icons">
-  <!-- לב -->
-  <svg viewBox="0 0 24 24" class="icon heart">
-    <path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2 4 4 0 0 1 7 2c0 5.5-7 10-7 10z"/>
-  </svg>
+    <div class="topbar-icons">
+  <svg viewBox="0 0 24 24" class="icon"><path d="M12 21s-7-4.35-7-10a4 4 0 0 1 7-2 4 4 0 0 1 7 2c0 5.65-7 10-7 10z"/></svg>
 
-  <!-- כוכב -->
-  <svg viewBox="0 0 24 24" class="icon star">
-    <path d="M12 17l6 4-2-7 6-5-7-.5L12 2 9 8.5 2 9l6 5-2 7z"/>
-  </svg>
+  <svg viewBox="0 0 24 24" class="icon"><path d="M12 17.27L18.18 21 16.54 13.97 22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
 
-  <!-- הודעות -->
-  <svg viewBox="0 0 24 24" class="icon chat">
-    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-  </svg>
+  <svg viewBox="0 0 24 24" class="icon"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
 
-  <!-- משתמש -->
-  <svg viewBox="0 0 24 24" class="icon user">
-    <path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0 2c-6 0-10 3-10 7v3h20v-3c0-4-4-7-10-7z"/>
-  </svg>
+  <svg viewBox="0 0 24 24" class="icon"><path d="M12 8a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0 2c-4 0-8 2-8 6v2h16v-2c0-4-4-6-8-6z"/></svg>
 
-  <!-- מיקום -->
-  <svg viewBox="0 0 24 24" class="icon location">
-    <path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7z"/>
-  </svg>
+  <svg viewBox="0 0 24 24" class="icon"><path d="M12 2C8 2 5 5 5 9c0 5 7 13 7 13s7-8 7-13c0-4-3-7-7-7z"/></svg>
 </div>
   </header>
 
@@ -390,60 +356,10 @@
       <div class="card">
         <div class="card-img">👤</div>
         <div class="card-body">
-          <div class="card-name">שרה, 24</div>
+         <i id="saveBtn" class="fa-regular fa-heart"></i>   <div style="position: absolute; left: 0; top: 20px; text-align: center; margin-left: 40px; ">
+          <div class="card-name"> שרה · 24</div>
           <div class="card-meta">ירושלים · חרדית · שומרת שבת</div>
-          <div class="card-text">
-            בחורה עם שמחת חיים, אוהבת בית חם, צניעות ודרך נקייה. מחפשת קשר רציני עם מטרה אמיתית.
-          </div>
-          <div class="tags">
-            <span class="tag">משפחה</span>
-            <span class="tag">צניעות</span>
-            <span class="tag">רצינות</span>
-          </div>
-          <div class="card-actions">
-            <button class="btn btn-main">לצפייה</button>
-            <button class="btn btn-light">שמור</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-img">👤</div>
-        <div class="card-body">
-          <div class="card-name">רחל, 27</div>
-          <div class="card-meta">בני ברק · דתית · לימוד ותוכן</div>
-          <div class="card-text">
-            אוהבת פשטות, עומק ושיח מכבד. מחפשת אדם עם לב טוב, יציבות ויראת שמיים.
-          </div>
-          <div class="tags">
-            <span class="tag">אמונה</span>
-            <span class="tag">עומק</span>
-            <span class="tag">בית יהודי</span>
-          </div>
-          <div class="card-actions">
-            <button class="btn btn-main">לצפייה</button>
-            <button class="btn btn-light">שמור</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="card-img">👤</div>
-        <div class="card-body">
-          <div class="card-name">אסתר, 22</div>
-          <div class="card-meta">בית שמש · מסורתית · משפחתית</div>
-          <div class="card-text">
-            מעריכה יושר, נעימות ותקשורת טובה. רוצה להכיר למטרת חתונה מתוך כבוד והדרגתיות.
-          </div>
-          <div class="tags">
-            <span class="tag">יושר</span>
-            <span class="tag">כבוד</span>
-            <span class="tag">שקט נפשי</span>
-          </div>
-          <div class="card-actions">
-            <button class="btn btn-main">לצפייה</button>
-            <button class="btn btn-light">שמור</button>
-          </div>
+            </div>
         </div>
       </div>
     </div>
@@ -459,6 +375,15 @@
       document.getElementById("sidebar").classList.remove("open");
       document.getElementById("overlay").classList.remove("show");
     }
+  const heart = document.getElementById("saveBtn");
+
+heart.addEventListener("click", () => {
+  heart.classList.toggle("active");
+
+  // מחליף בין לב ריק למלא
+  heart.classList.toggle("fa-regular");
+  heart.classList.toggle("fa-solid");
+});
   </script>
 
 </body>
