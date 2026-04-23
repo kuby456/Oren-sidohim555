@@ -1,559 +1,550 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>השלמת פרטים</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <title>לב נאמן</title>
 
-<style>
-/* עיצוב כללי */
-* {
-  box-sizing: border-box;
-}
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-body {
-  font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
-  
-  margin: 0;
-  padding: 20px;
-  direction: rtl;
-}
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f1ea;
+      color: #222;
+    }
 
-h2 {
-  text-align: center;
-  color: #1a1a2e;
-  font-weight: 600;
-  margin-bottom: 24px;
-}
+    /* סרגל עליון */
+    .topbar {
+      width: 100%;
+      min-height: 95px;
+      background: linear-gradient(135deg, #5c2e2e, #8b4a4a, #c08a6b);
+      color: white;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.25);
+      display: flex;
+      justify-content: left;
+     
+      
+      
+    }
 
-.form {
-  max-width: 650px;
-  margin: 0 auto;
-  background: white;
-  padding: 30px 25px;
-  border-radius: 20px;
-  }
-
-/* שדות טופס */
-.field {
-  margin-bottom: 20px;
-}
-
-.field label {
-  display: block;
-  font-weight: 500;
-  margin-bottom: 8px;
-  color: #333;
-  font-size: 14px;
-}
-
-.field input,
-.field select,
-.field textarea {
-  width: 100%;
-  padding: 12px 14px;
-  font-size: 15px;
-  border: 1px solid #ccc;
-  border-radius: 12px;
-  transition: 0.2s;
-  background-color: #fff;
-  font-family: inherit;
-}
-
-.field input:focus,
-.field select:focus,
-.field textarea:focus {
-  border-color: #4f46e5;
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
-}
-
-.field textarea {
-  resize: vertical;
-  min-height: 80px;
-}
-
-/* הודעת שדה חובה */
-
-.required {
-  display: none;
-  color: #e11d48;
-  font-size: 12px;
-  margin-top: 5px;
-  font-weight: normal;
-}
-/* כפתור */
-button {
-  background-color: #3730a3;
-  color: white;
-  border: none;
-  width: 100%;
-  padding: 14px;
-  font-size: 16px;
-  font-weight: 600;
-  border-radius: 0;
-  cursor: pointer;
-  transition: background 0.2s;
-  margin-top: 12px;
-}
-
-button:hover {
-  background-color: #4338ca;
-}
-
-/* שדה העלאת תמונות */
-.field label span {
-  display: inline-block;
-  margin-bottom: 8px;
-}
-  .field-tio span{
-    display: column;
-  font-weight: 500;
-  margin-bottom: 8px;
-  color: #333;
-  font-size: 14px;
-    text-align:center;
-    justify-content: center;
-    align-items: center;
-  }
-   .field-tio{
-     display: flex;
-  text-align:center;
-    justify-content: center;
-    align-items: center;
-   }
-input[type="file"] {
-  padding: 8px;
-  background: #f9fafb;
-  border: 1px dashed #aaa;
-  border-radius: 12px;
-  cursor: pointer;
-}
-
-#preview {
-  margin-top: 12px;
-}
-
-#preview img {
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
-  border-radius: 12px;
-  border: 1px solid #ddd;
-  background: #f8f8f8;
-}
-
-/* ריווח קבוצת כפתורי הקבצים */
-div[style*="display:flex;gap:10px"] {
-  margin-bottom: 8px;
-}
-  
-  .upload-buttons {
-  display: flex;
-  gap: 10px;
-  margin: 10px 0;
-}
-
-.upload-btn {
-  flex: 1;
-  text-align: center;
-  padding: 10px;
-  border-radius: 6px; /* מרובע עדין */
-  background: #4338ca;
-  color: white;
-  font-size: 14px;
-  cursor: pointer;
-  transition: 0.2s;
-  border: 1px solid #3730a3;
-}
-.upload-btn {
-  display: flex;
+    .topbar-top {
+display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 6px;
+      
+  
+ 
+}
+
+    .menu-btn {
+      background: rgba(255,255,255,0.14);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: white;
+      font-size: 22px;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      cursor: pointer;
+     position: absolute;
+      left: 15px;
+      outline: none;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+    }
+
+   
+
+    
+    /* סרגל צד */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -280px;
+      width: 260px;
+      height: 100%;
+      background: #fffaf5;
+      box-shadow: 3px 0 18px rgba(0,0,0,0.2);
+      z-index: 2000;
+      transition: left 0.3s ease;
+      padding: 18px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .sidebar.open {
+      left: 0;
+    }
+
+    .sidebar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .sidebar-title {
+      font-size: 22px;
+      color: #6f3d3d;
+      font-weight: bold;
+    }
+
+    .close-btn {
+      background: #6f3d3d;
+      color: white;
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    .sidebar a {
+      text-decoration: none;
+      color: #333;
+      background: #f3e8df;
+      padding: 12px;
+      border-radius: 12px;
+      font-weight: bold;
+      transition: 0.2s;
+    }
+
+    .sidebar a:hover {
+      background: #e7d4c4;
+    }
+
+    /* שכבה כהה */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.35);
+      z-index: 1500;
+      display: none;
+    }
+
+    .overlay.show {
+      display: block;
+    }
+
+    /* כרטיסים - אחד מתחת לשני */
+    .cards {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      margin: 20px 0 0;
+    }
+
+    .card {
+      background: white;
+      border-radius: 0px;
+      overflow: hidden;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+      border: 1px solid #eee2d8;
+      position: relative;
+      
+    }
+
+    .card-img {
+      width: 100px;
+      height: 100px;
+      background: linear-gradient(135deg, #d9b8a0, #f2dfcf, #cda98b);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 50px;
+    }
+
+    
+
+    .card-name {
+      font-size: 22px;
+      font-weight: bold;
+      color: #4d2a2a;
+      margin-bottom: 6px;
+    }
+
+    .card-meta {
+      font-size: 14px;
+      color: #6d6d6d;
+      margin-bottom: 10px;
+      
+    }
+
+    .card-text {
+      font-size: 15px;
+      line-height: 1.6;
+      margin-bottom: 14px;
+      color: #333;
+    }
+  
+    .btn {
+      flex: 1;
+      border: none;
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .btn-main {
+      background: #7a4343;
+      color: white;
+    }
+
+    .btn-light {
+      background: #efe3d8;
+      color: #5c3434;
+    }
+  
+  .topbar-icons {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 8px 0 12px;
 }
 
 .icon {
-  width: 50px;
-  height: 50px;
+  width: 22px;
+  height: 22px;
   fill: white;
-}
-.upload-btn:hover {
-  background: #3730a3;
-}
-
-.upload-btn:active {
-  transform: scale(0.95);
+  cursor: pointer;
+  transition: 0.2s;
 }
 
-/* תצוגת תמונות */
-.preview {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+.icon:hover {
+  transform: scale(1.15);
+  opacity: 0.8;
+}
+  
+  .saveBtn {
+  font-size: 24px;
+  cursor: pointer;
+  color: #bbb;
+  transition: 0.3s;
+    position: absolute;
+    left: 10px; top: 8px;
 }
 
-.preview-img {
-  width: 70px;
-  height: 70px;
-  object-fit: cover;
-  border: 1px solid black;
+.saveBtn.active {
+  color: red;
+  transform: scale(1.2);
+}
+  
+  .saveBtn {
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
 }
 
-.img-box {
-  position: relative;
+.saveBtn:focus {
+  outline: none;
 }
 
-.delete-btn {
-  position: absolute;
-  top: -6px;
-  left: -6px;
-  background: black;
-  color: white;
-  font-size: 12px;
+.saveBtn:active {
+  outline: none;
+}
+  
+  .google-btn {
+  width: 45px;
+  height: 45px;
   border-radius: 50%;
-  width: 18px;
-  height: 18px;
+  border: none;
+  background: white;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  transition: 0.2s;
+  margin: 0 15px 0;
+}
+
+.google-btn i {
+  font-size: 22px;
+  color: #db4437; /* אדום של גוגל */
+}
+
+.google-btn:hover {
+  transform: scale(1.1);
+}
+
+.google-btn:active {
+  transform: scale(0.95);
 }
   
-</style>
-</head>
+  .span654 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+    text-align: center;
+    position: absolute;
+    right: 5px;
+    top: 20px;
+    outline: none;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
 
+  .span6548{
+    background: blue;
+    border-radius: 2px;
+    padding: 2px 6px;
+    font-size: 10px;
+    
+    
+  }
+
+  </style>
+</head>
 <body>
 
-<h2>מילוי פרטים</h2>
+  <!-- סרגל עליון -->
+  <header class="topbar">
+    <div class="topbar-top">
+      <div class="span654">
+     <button class="google-btn" onclick="signInWithGoogle()">
+  <svg viewBox="0 0 48 48" width="24" height="24">
+    <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.6 32.6 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3 0 5.7 1.1 7.8 3l5.7-5.7C33.5 6.5 29 4.5 24 4.5 12.9 4.5 4 13.4 4 24.5S12.9 44.5 24 44.5 44 35.6 44 24.5c0-1.3-.1-2.7-.4-4z"/>
+    <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.5 16.2 18.9 13 24 13c3 0 5.7 1.1 7.8 3l5.7-5.7C33.5 6.5 29 4.5 24 4.5c-7.7 0-14.3 4.4-17.7 10.2z"/>
+    <path fill="#4CAF50" d="M24 44.5c5.1 0 9.7-2 13.3-5.3l-6.1-5c-2.1 1.5-4.7 2.3-7.2 2.3-5.2 0-9.6-3.4-11.2-8l-6.5 5C9.6 40.1 16.3 44.5 24 44.5z"/>
+    <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-1.1 3.1-3.4 5.6-6.1 7.2l6.1 5c3.5-3.2 5.7-7.9 5.7-13.7 0-1.3-.1-2.7-.4-4z"/>
+  </svg>
+        
+</button>
+        <span class="span6548">כניסה</span>
+     </div>
+     
+      <button class="menu-btn" onclick="openSidebar()">☰</button>
 
-<div class="form">
+     
 
-  <div class="field">
-    <label>שם פרטי</label>
-    <input id="first_name">
-    <div class="required">שדה חובה</div>
-  </div>
+    
+  </header>
 
-  <div class="field">
-    <label>שם משפחה</label>
-    <input id="last_name">
-    <div class="required">שדה חובה</div>
-  </div>
+  <!-- שכבה כהה -->
+  <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
 
-  <div class="field">
-    <label>גיל</label>
-    <input id="age" type="number">
-    <div class="required">שדה חובה</div>
-  </div>
+  <!-- סרגל צד -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-title">לב נאמן</div>
+      <button class="close-btn" onclick="closeSidebar()">✕</button>
+    </div>
 
-  <div class="field">
-    <label>גובה</label>
-    <input id="height" type="number" placeholder="בס״מ">
-  </div>
+   <a href="#">פרופיל אישי</a>
+    <a href="#">ההתאמות שלי</a>
+    <a href="#">הודעות (מנהלי האתר)</a>
+    <a href="#">אודות</a>
+    
+  </aside>
 
-  <div class="field">
-    <label>מוצא</label>
-    <input id="origin">
-    <div class="required">שדה חובה</div>
-  </div>
-  
+   
 
-  <div class="field">
-    <label>רמה דתית</label>
-    <select id="religion">
-      <option value="">בחר</option>
-      <option>חרדי</option>
-      <option>דתי</option>
-      <option>מסורתי</option>
-      <option>חילוני</option>
-    </select>
-    <div class="required">שדה חובה</div>
-  </div>
+  <!-- תוכן -->
+  <main class="page">
+    
+    <div class="cards">
+      <div class="cards"></div>
+    </div>
+  </main>
+    
+    
+    <script>
+   
+const script = document.createElement("script");
+script.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
 
-  <div class="field">
-    <label>קצת עליי (לא חובה)</label>
-    <textarea id="about"></textarea>
-  </div>
+script.onload = async () => {
 
-  <div class="field">
-    <label>מספר טלפון</label>
-    <input id="phone" type="tel">
-    <div class="required">שדה חובה</div>
-  </div>
-  
-<div class="field-tio">
+  const supabaseClient = window.supabase.createClient(
+    "https://gpdkkjvppcsyqcdfbfyd.supabase.co",
+    "sb_publishable_f5nIFbWwsTLCroOegC8vmw_WTxoEeeA"
+  );
 
-  <label style="display:flex;justify-content:space-between;align-items:center;">
-   <span style="font-weight:bold;">
-  העלאת תמונות לכרטיס <br>
-  <span style="
-    background:#eee;
-    color:#555;
-    font-size:11px;
-    padding:2px 6px;
-    border-radius:4px;
-    margin-right:6px;
-  ">
-    (לא חובה אופציונלי)
-  </span>
-</span>
-  </label>
-
- 
-  </div>
-  
- <div class="upload-buttons">
-
-  <!-- העלאת תמונה -->
-  <label class="upload-btn">
-    <input type="file" id="imageInput" accept="image/*" multiple hidden>
-
-    <span class="icon-wrap">
-      <!-- אייקון תמונה -->
-      <svg viewBox="0 0 24 24" class="icon">
-        <path d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2ZM8.5 11.5l2.5 3 3.5-4.5L20 17H4l4.5-5.5Z"/>
-      </svg>
-    </span>
-
-    העלאה תמונה
-  </label>
-
-  <!-- מצלמה -->
-  <label class="upload-btn">
-    <input type="file" id="cameraInput" accept="image/*" capture="environment" hidden>
-
-    <span class="icon-wrap">
-      <!-- אייקון מצלמה -->
-      <svg viewBox="0 0 24 24" class="icon">
-        <path d="M9 3 7.17 5H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.17L15 3H9Zm3 15a5 5 0 1 1 0-10 5 5 0 0 1 0 10Zm0-2.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"/>
-      </svg>
-    </span>
-
-    צלם תמונה
-  </label>
-
-</div>
-
-<div id="preview" class="preview"></div>
-
-  <button onclick="saveProfile()">שמור והמשך</button>
-</div>
-
- <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
-const supabaseClient = supabase.createClient(
-  "https://gpdkkjvppcsyqcdfbfyd.supabase.co",
-  "sb_publishable_f5nIFbWwsTLCroOegC8vmw_WTxoEeeA"
-);
-
-// ---------------- INIT ----------------
-init();
-
-async function init() {
-  await supabaseClient.auth.getSession();
+  window.supabaseClient = supabaseClient;
 
   const { data: { user } } = await supabaseClient.auth.getUser();
 
-  if (!user) {
-    window.location.href = "index.html";
-    return;
-  }
-
-  checkProfile(user);
-  setupValidation();
+  if (user) {
+  showUser(user);
+  await checkProfile(user);
 }
 
-// ---------------- CHECK PROFILE ----------------
-async function checkProfile(user) {
-  const { data } = await supabaseClient
+// 👇 תוסיף את זה
+await loadUsers();
+};
+
+document.head.appendChild(script);
+
+
+// שימוש
+
+    function openSidebar() {
+      document.getElementById("sidebar").classList.add("open");
+      document.getElementById("overlay").classList.add("show");
+    }
+
+    function closeSidebar() {
+      document.getElementById("sidebar").classList.remove("open");
+      document.getElementById("overlay").classList.remove("show");
+    }
+  
+  const hearts = document.querySelectorAll(".saveBtn");
+
+hearts.forEach(heart => {
+  heart.addEventListener("click", () => {
+    heart.classList.toggle("active");
+
+    // מחליף בין לב ריק למלא
+    heart.classList.toggle("fa-regular");
+    heart.classList.toggle("fa-solid");
+  });
+});
+    
+    document.querySelector(".page").addEventListener("click", (e) => {
+
+  // אם לחצו על לב → לא מעביר דף
+  if (e.target.closest(".saveBtn")) return;
+
+  // אם לחצו על כרטיס
+  const card = e.target.closest(".card");
+
+  if (card) {
+    const link = card.dataset.link;
+    window.location.href = link;
+  }
+
+});
+    
+    async function signInWithGoogle() {
+  if (!window.supabaseClient) return;
+
+  const { data: { user } } = await supabaseClient.auth.getUser();
+
+  if (user) return; // כבר מחובר
+
+  await supabaseClient.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo: "https://kuby456.github.io/Oren-sidohim555/",
+      queryParams: {
+        prompt: "select_account"
+      }
+    }
+  });
+}
+    
+   function showUser(user) {
+  const container = document.querySelector(".span654");
+
+  const name = user.user_metadata.full_name || "משתמש";
+
+  container.innerHTML = `
+    <div style="display:flex;flex-direction:column;align-items:center;">
+      
+      <div style="
+        width:45px;
+        height:45px;
+        border-radius:50%;
+        background:#fff;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        box-shadow:0 4px 10px rgba(0,0,0,0.2);
+      ">
+        <i class="fa-solid fa-user" style="color:#7a4343;font-size:20px;"></i>
+      </div>
+
+      <span class="span6548">שלום ${name.split(" ")[0]}</span>
+    </div>
+  `;
+}
+    
+    async function checkProfile(user) {
+  const { data, error } = await supabaseClient
     .from("profiles")
     .select("id")
     .eq("id", user.id)
-    .maybeSingle();
+    .single();
 
-  if (data) {
-    window.location.href = "index.html";
-  }
-}
-
-// ---------------- VALIDATION ----------------
-function setupValidation() {
-  document.querySelectorAll("input, select").forEach(input => {
-    input.addEventListener("input", () => {
-      const error = input.parentElement.querySelector(".required");
-
-      if (input.value.trim()) {
-        error.style.display = "none";
-        input.style.borderColor = "#ccc";
-      }
-    });
-  });
-}
-
-function validate() {
-  let valid = true;
-
-  const requiredFields = [
-    "first_name",
-    "last_name",
-    "age",
-    "origin",
-    "religion",
-    "phone"
-  ];
-
-  requiredFields.forEach(id => {
-    const input = document.getElementById(id);
-    const error = input.parentElement.querySelector(".required");
-
-    if (!input.value.trim()) {
-      error.style.display = "block";
-      input.style.borderColor = "red";
-      valid = false;
-    } else {
-      error.style.display = "none";
-      input.style.borderColor = "#ccc";
-    }
-  });
-
-  return valid;
-}
-
-// ---------------- IMAGES ----------------
-let images = [];
-
-document.getElementById("imageInput").addEventListener("change", handleFiles);
-document.getElementById("cameraInput").addEventListener("change", handleFiles);
-
-async function handleFiles(e) {
-  const files = Array.from(e.target.files);
-
-  for (let file of files) {
-    const compressed = await compressImage(file);
-    images.push(compressed);
-    renderImages();
-  }
-}
-
-function renderImages() {
-  const preview = document.getElementById("preview");
-  preview.innerHTML = "";
-
-  images.forEach((img, index) => {
-    const box = document.createElement("div");
-    box.className = "img-box";
-
-    const image = document.createElement("img");
-    image.src = URL.createObjectURL(img);
-    image.className = "preview-img";
-
-    const del = document.createElement("div");
-    del.className = "delete-btn";
-    del.innerText = "×";
-    del.onclick = () => {
-      images.splice(index, 1);
-      renderImages();
-    };
-
-    box.appendChild(image);
-    box.appendChild(del);
-    preview.appendChild(box);
-  });
-}
-
-// ---------------- COMPRESS ----------------
-function compressImage(file) {
-  return new Promise((resolve) => {
-    const img = new Image();
-    const reader = new FileReader();
-
-    reader.onload = (e) => img.src = e.target.result;
-
-    img.onload = () => {
-      const canvas = document.createElement("canvas");
-
-      const MAX_WIDTH = 800;
-      const scale = MAX_WIDTH / img.width;
-
-      canvas.width = MAX_WIDTH;
-      canvas.height = img.height * scale;
-
-      const ctx = canvas.getContext("2d");
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-      canvas.toBlob((blob) => {
-        resolve(new File([blob], file.name, {
-          type: "image/jpeg"
-        }));
-      }, "image/jpeg", 0.7);
-    };
-
-    reader.readAsDataURL(file);
-  });
-}
-
-// ---------------- SAVE ----------------
-async function saveProfile() {
-
-  if (!validate()) return;
-
-  const { data: { user } } = await supabaseClient.auth.getUser();
-
-  const first_name = document.getElementById("first_name").value.trim();
-  const last_name = document.getElementById("last_name").value.trim();
-  const age = document.getElementById("age").value;
-  const phone = document.getElementById("phone").value.trim();
-
-  const height = document.getElementById("height").value;
-  const origin = document.getElementById("origin").value;
-  const religion = document.getElementById("religion").value;
-  const about = document.getElementById("about").value;
-
-  let imageUrls = [];
-
-  // העלאת תמונות
-  for (let img of images) {
-    const fileName = `${user.id}/${Date.now()}-${img.name}`;
-
-    const { error } = await supabaseClient.storage
-      .from("avatars")
-      .upload(fileName, img);
-
-    if (!error) {
-      const { data } = supabaseClient.storage
-        .from("avatars")
-        .getPublicUrl(fileName);
-
-      imageUrls.push(data.publicUrl);
-    }
+  if (error && error.code !== "PGRST116") {
+    console.log("שגיאה:", error);
   }
 
-  // שמירה DB
-  const { error } = await supabaseClient
+  if (!data) {
+    window.location.href = "https://kuby456.github.io/Oren-sidohim555/infouser1.html";
+  }
+}
+    
+    
+    async function loadUsers() {
+
+  const { data, error } = await supabaseClient
     .from("profiles")
-    .upsert({
-      id: user.id,
-      first_name,
-      last_name,
-      age,
-      height,
-      origin,
-      religion,
-      about,
-      phone,
-      images: imageUrls
-    });
+    .select("*");
 
-  if (!error) {
-    window.location.href = "index.html";
-  } else {
+  if (error) {
     console.log(error);
-    alert("שגיאה בשמירה");
+    return;
   }
+
+  const container = document.querySelector(".cards");
+  container.innerHTML = "";
+
+  data.forEach(user => {
+
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.innerHTML = `
+     <div class="card-img">
+  ${
+    Array.isArray(user.images) && user.images[0]
+      ? `<img src="${user.images[0]}" style="width:100%;height:100%;object-fit:cover">`
+      : "👤"
+  }
+</div>
+
+      <div class="card-body">
+        <i class="saveBtn fa-regular fa-heart"></i>  
+
+        <div style="position: absolute; left: 0; top: 20px; text-align: center; margin-left: 40px;">
+          <div class="card-name">${user.first_name} · ${user.age}</div>
+          <div class="card-meta">${user.city || ""} · ${user.religion || ""}</div>
+        </div>
+      </div>
+    `;
+
+    // מעבר לפרופיל
+    card.onclick = () => {
+      window.location.href = `profile1.html?id=${user.id}`;
+    };
+
+    container.appendChild(card);
+  });
+document.querySelectorAll(".saveBtn").forEach(heart => {
+  heart.addEventListener("click", (e) => {
+    e.stopPropagation();
+
+    heart.classList.toggle("active");
+    heart.classList.toggle("fa-regular");
+    heart.classList.toggle("fa-solid");
+  });
+});
 }
-</script>
+
+  </script>
 
 </body>
 </html>
