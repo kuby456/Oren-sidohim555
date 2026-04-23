@@ -225,7 +225,7 @@ div[style*="display:flex;gap:10px"] {
 
 <body>
 
-<h2>מילוי פרטים</h2>
+<h2>מילוי פרטי הפרופיל</h2>
 
 <div class="form">
 
@@ -238,25 +238,44 @@ div[style*="display:flex;gap:10px"] {
   <div class="field">
     <label>שם משפחה</label>
     <input id="last_name">
-    <div class="required">שדה חובה</div>
-  </div>
+    </div>
+
+ <div class="field">
+  <label>גיל</label>
+  <select id="age"></select>
+  <div class="required">שדה חובה</div>
+</div>
 
   <div class="field">
-    <label>גיל</label>
-    <input id="age" type="number">
-    <div class="required">שדה חובה</div>
-  </div>
+  <label>גובה</label>
+  <select id="height"></select>
+</div>
 
   <div class="field">
-    <label>גובה</label>
-    <input id="height" type="number" placeholder="בס״מ">
-  </div>
+  <label>מוצא</label>
+  <select id="origin">
+    <option value="">בחר מוצא</option>
 
-  <div class="field">
-    <label>מוצא</label>
-    <input id="origin">
-    <div class="required">שדה חובה</div>
-  </div>
+    <option>אשכנזי</option>
+    <option>ספרדי</option>
+    <option>מזרחי</option>
+    <option>תימני</option>
+    <option>מרוקאי</option>
+    <option>עיראקי</option>
+    <option>פרסי</option>
+    <option>כורדי</option>
+    <option>קווקזי</option>
+    <option>אתיופי</option>
+    <option>רוסי</option>
+    <option>אמריקאי</option>
+    <option>צרפתי</option>
+
+    <option>מעורב</option>
+    <option>אחר</option>
+  </select>
+
+  <div class="required">שדה חובה</div>
+</div>
   
 
   <div class="field">
@@ -350,18 +369,23 @@ const supabaseClient = supabase.createClient(
 
 // ---------------- INIT ----------------
 init();
-
+const DEV_MODE = false;
+  
 async function init() {
   await supabaseClient.auth.getSession();
 
-  const { data: { user } } = await supabaseClient.auth.getUser();
+  const { data } = await supabaseClient.auth.getUser();
+  const user = data?.user;
 
-  if (!user) {
+  console.log("user:", user);
+
+  // 👇 רק בפרודקשן
+  if (!user && !DEV_MODE) {
     window.location.href = "index.html";
     return;
   }
 
-  checkProfile(user);
+  setupSelects();
   setupValidation();
 }
 
@@ -493,7 +517,30 @@ function compressImage(file) {
     reader.readAsDataURL(file);
   });
 }
+const ageSelect = document.getElementById("age");
 
+// אופציה ראשונה
+ageSelect.innerHTML = '<option value="">בחר גיל</option>';
+
+for (let i = 18; i <= 80; i++) {
+  const option = document.createElement("option");
+  option.value = i;
+  option.textContent = i;
+  ageSelect.appendChild(option);
+}
+  
+  const heightSelect = document.getElementById("height");
+
+heightSelect.innerHTML = '<option value="">בחר גובה</option>';
+
+// טווח נורמלי
+for (let i = 140; i <= 210; i++) {
+  const option = document.createElement("option");
+  option.value = i;
+  option.textContent = i + " ס״מ";
+  heightSelect.appendChild(option);
+}
+  
 // ---------------- SAVE ----------------
 async function saveProfile() {
 
