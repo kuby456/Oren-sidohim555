@@ -159,12 +159,13 @@ div[style*="display:flex;gap:10px"] {
   text-align: center;
   padding: 10px;
   border-radius: 6px; /* מרובע עדין */
-  background: #4338ca;
-  color: white;
-  font-size: 14px;
+  background: #ffffff;
+  color: #43579b;
+  font-size: 15px;
   cursor: pointer;
   transition: 0.2s;
-  border: 1px solid #3730a3;
+  border: 2px solid #43579b;
+  font-weight: 500;
 }
 .upload-btn {
   display: flex;
@@ -173,14 +174,17 @@ div[style*="display:flex;gap:10px"] {
   gap: 6px;
 }
 
-.icon {
+.icon { 
   width: 50px;
   height: 50px;
-  fill: white;
+  fill: #43579b;
 }
 .upload-btn:hover {
   background: #3730a3;
+  color: white;
 }
+
+
 
 .upload-btn:active {
   transform: scale(0.95);
@@ -236,7 +240,7 @@ div[style*="display:flex;gap:10px"] {
   </div>
 
   <div class="field">
-    <label>שם משפחה</label>
+    <label>שם משפחה (לא חובה)</label>
     <input id="last_name">
     </div>
 
@@ -367,7 +371,7 @@ const supabaseClient = supabase.createClient(
   "sb_publishable_f5nIFbWwsTLCroOegC8vmw_WTxoEeeA"
 );
 
-  const DEV_MODE = false;
+  const DEV_MODE = true;
 // ---------------- INIT ----------------
 init();
 
