@@ -367,9 +367,10 @@ const supabaseClient = supabase.createClient(
   "sb_publishable_f5nIFbWwsTLCroOegC8vmw_WTxoEeeA"
 );
 
+  const DEV_MODE = false;
 // ---------------- INIT ----------------
 init();
-const DEV_MODE = false;
+
   
 async function init() {
   await supabaseClient.auth.getSession();
@@ -517,28 +518,29 @@ function compressImage(file) {
     reader.readAsDataURL(file);
   });
 }
-const ageSelect = document.getElementById("age");
-
-// אופציה ראשונה
-ageSelect.innerHTML = '<option value="">בחר גיל</option>';
-
-for (let i = 18; i <= 80; i++) {
-  const option = document.createElement("option");
-  option.value = i;
-  option.textContent = i;
-  ageSelect.appendChild(option);
-}
-  
+function setupSelects() {
+  const ageSelect = document.getElementById("age");
   const heightSelect = document.getElementById("height");
 
-heightSelect.innerHTML = '<option value="">בחר גובה</option>';
+  if (!ageSelect || !heightSelect) return;
 
-// טווח נורמלי
-for (let i = 140; i <= 210; i++) {
-  const option = document.createElement("option");
-  option.value = i;
-  option.textContent = i + " ס״מ";
-  heightSelect.appendChild(option);
+  // גיל
+  ageSelect.innerHTML = '<option value="">בחר גיל</option>';
+  for (let i = 18; i <= 80; i++) {
+    const option = document.createElement("option");
+    option.value = i;
+    option.textContent = i;
+    ageSelect.appendChild(option);
+  }
+
+  // גובה
+  heightSelect.innerHTML = '<option value="">בחר גובה</option>';
+  for (let i = 140; i <= 210; i++) {
+    const option = document.createElement("option");
+    option.value = i;
+    option.textContent = i + " ס״מ";
+    heightSelect.appendChild(option);
+  }
 }
   
 // ---------------- SAVE ----------------
