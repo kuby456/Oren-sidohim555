@@ -458,7 +458,7 @@ hearts.forEach(heart => {
   `;
 }
     async function checkUser() {
-  const { data } = await supabase.auth.getUser();
+  const { data } = await supabaseClient.auth.getUser();
 
   if (data.user) {
     showUser(data.user);
