@@ -409,6 +409,8 @@ function setupValidation() {
     input.addEventListener("input", () => {
       const error = input.parentElement.querySelector(".required");
 
+      if (!error) return; // 👈 זה הפתרון
+
       if (input.value.trim()) {
         error.style.display = "none";
         input.style.borderColor = "#ccc";
@@ -416,7 +418,6 @@ function setupValidation() {
     });
   });
 }
-
 function validate() {
   let valid = true;
 
@@ -429,19 +430,19 @@ function validate() {
     "phone"
   ];
 
-  requiredFields.forEach(id => {
-    const input = document.getElementById(id);
-    const error = input.parentElement.querySelector(".required");
+requiredFields.forEach(id => {
+  const input = document.getElementById(id);
+  const error = input.parentElement.querySelector(".required");
 
-    if (!input.value.trim()) {
-      error.style.display = "block";
-      input.style.borderColor = "red";
-      valid = false;
-    } else {
-      error.style.display = "none";
-      input.style.borderColor = "#ccc";
-    }
-  });
+  if (!input.value.trim()) {
+    if (error) error.style.display = "block"; // 👈 רק אם קיים
+    input.style.borderColor = "red";
+    valid = false;
+  } else {
+    if (error) error.style.display = "none";
+    input.style.borderColor = "#ccc";
+  }
+});
 
   return valid;
 }
