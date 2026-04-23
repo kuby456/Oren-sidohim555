@@ -395,12 +395,6 @@ function loadSupabaseAndInit(callback) {
 }
 
 // שימוש
-loadSupabaseAndInit((supabase) => {
-  console.log("Supabase מוכן");
-
-  // דוגמה
-  window.supabaseClient = supabase;
-});
 
     function openSidebar() {
       document.getElementById("sidebar").classList.add("open");
@@ -464,8 +458,21 @@ hearts.forEach(heart => {
     showUser(data.user);
   }
 }
+    
+    loadSupabaseAndInit(async (supabase) => {
+  window.supabaseClient = supabase;
 
-checkUser();
+  // 🔥 זה מה שחסר לך
+  await supabase.auth.getSession();
+
+  const { data } = await supabase.auth.getUser();
+
+  if (data.user) {
+    showUser(data.user);
+  }
+});
+
+
   </script>
 
 </body>
