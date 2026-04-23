@@ -371,7 +371,7 @@ const supabaseClient = supabase.createClient(
   "sb_publishable_f5nIFbWwsTLCroOegC8vmw_WTxoEeeA"
 );
 
-  const DEV_MODE = true;
+  const DEV_MODE = false;
 // ---------------- INIT ----------------
 init();
 
@@ -553,6 +553,7 @@ async function saveProfile() {
   if (!validate()) return;
 
   const { data: { user } } = await supabaseClient.auth.getUser();
+console.log("user:", user);
 
   const first_name = document.getElementById("first_name").value.trim();
   const last_name = document.getElementById("last_name").value.trim();
@@ -606,6 +607,7 @@ async function saveProfile() {
     alert("שגיאה בשמירה");
   }
 }
+
 </script>
 
 </body>
