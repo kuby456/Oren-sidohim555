@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>פרופילים</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  background: #f4f1ea;
+  padding: 20px;
+}
+
+/* גריד */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+
+/* כרטיס */
+.card {
+  background: white;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* תמונה */
+.card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  background: #ddd;
+}
+
+/* תוכן */
+.content {
+  padding: 10px;
+}
+
+.name {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+.meta {
+  font-size: 13px;
+  color: #777;
+  margin: 4px 0;
+}
+
+.about {
+  font-size: 13px;
+  color: #444;
+  margin-top: 6px;
+}
+</style>
+</head>
+
+<body>
+
+<h2>משתמשים</h2>
+
+<div id="grid" class="grid"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const supabaseClient = supabase.createClient(
+  "https://gpdkkjvppcsyqcdfbfyd.supabase.co",
+  "sb_publishable_f5nIFbWwsTLCroOegC8vmw_WTxoEeeA"
+);
+
+loadProfiles();
+
+async function loadProfiles() {
+
+  const { data, error } = await supabaseClient
+    .from("profiles")
+    .select("*");
+
+  if (error) {
+    console.log(error);
+    return;
+  }
+
+  const grid = document.getElementById("grid");
+  grid.innerHTML = "";
+
+  data.forEach(user => {
+
+    const card = document.createElement("div");
+    card.className = "card";
+
+    const img = document.createElement("img");
+
+    // אם יש תמונה
+    if (user.images && user.images.length > 0) {
+      img.src = user.images[0];
+    } else {
+      img.src = "https://via.placeholder.com/300x200?text=No+Image";
+    }
+
+    const content = document.createElement("div");
+    content.className = "content";
+
+    content.innerHTML = `
+      <div class="name">${user.first_name || ""} ${user.last_name || ""} · ${user.age || ""}</div>
+      <div class="meta">${user.origin || ""} · ${user.religion || ""}</div>
+      <div class="about">${user.about || ""}</div>
+    `;
+
+    card.appendChild(img);
+    card.appendChild(content);
+    grid.appendChild(card);
+  });
+}
+</script>
+
+</body>
+</html>
