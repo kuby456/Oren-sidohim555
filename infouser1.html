@@ -421,14 +421,13 @@ function setupValidation() {
 function validate() {
   let valid = true;
 
-  const requiredFields = [
-    "first_name",
-    "last_name",
-    "age",
-    "origin",
-    "religion",
-    "phone"
-  ];
+ const requiredFields = [
+  "first_name",
+  "age",
+  "origin",
+  "religion",
+  "phone"
+];
 
 requiredFields.forEach(id => {
   const input = document.getElementById(id);
