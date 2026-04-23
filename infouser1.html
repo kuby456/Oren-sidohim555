@@ -74,13 +74,14 @@ h2 {
 }
 
 /* הודעת שדה חובה */
+
 .required {
+  display: none;
   color: #e11d48;
   font-size: 12px;
   margin-top: 5px;
   font-weight: normal;
 }
-
 /* כפתור */
 button {
   background-color: #3730a3;
@@ -339,7 +340,7 @@ div[style*="display:flex;gap:10px"] {
   <button onclick="saveProfile()">שמור והמשך</button>
 </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+ <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 const supabaseClient = supabase.createClient(
@@ -347,10 +348,10 @@ const supabaseClient = supabase.createClient(
   "sb_publishable_f5nIFbWwsTLCroOegC8vmw_WTxoEeeA"
 );
 
-// ---------- בדיקה ----------
-checkProfile();
+// ---------------- INIT ----------------
+init();
 
-async function checkProfile() {
+async function init() {
   await supabaseClient.auth.getSession();
 
   const { data: { user } } = await supabaseClient.auth.getUser();
@@ -360,6 +361,12 @@ async function checkProfile() {
     return;
   }
 
+  checkProfile(user);
+  setupValidation();
+}
+
+// ---------------- CHECK PROFILE ----------------
+async function checkProfile(user) {
   const { data } = await supabaseClient
     .from("profiles")
     .select("id")
@@ -371,7 +378,50 @@ async function checkProfile() {
   }
 }
 
-// ---------- תמונות ----------
+// ---------------- VALIDATION ----------------
+function setupValidation() {
+  document.querySelectorAll("input, select").forEach(input => {
+    input.addEventListener("input", () => {
+      const error = input.parentElement.querySelector(".required");
+
+      if (input.value.trim()) {
+        error.style.display = "none";
+        input.style.borderColor = "#ccc";
+      }
+    });
+  });
+}
+
+function validate() {
+  let valid = true;
+
+  const requiredFields = [
+    "first_name",
+    "last_name",
+    "age",
+    "origin",
+    "religion",
+    "phone"
+  ];
+
+  requiredFields.forEach(id => {
+    const input = document.getElementById(id);
+    const error = input.parentElement.querySelector(".required");
+
+    if (!input.value.trim()) {
+      error.style.display = "block";
+      input.style.borderColor = "red";
+      valid = false;
+    } else {
+      error.style.display = "none";
+      input.style.borderColor = "#ccc";
+    }
+  });
+
+  return valid;
+}
+
+// ---------------- IMAGES ----------------
 let images = [];
 
 document.getElementById("imageInput").addEventListener("change", handleFiles);
@@ -413,7 +463,7 @@ function renderImages() {
   });
 }
 
-// ---------- כיווץ ----------
+// ---------------- COMPRESS ----------------
 function compressImage(file) {
   return new Promise((resolve) => {
     const img = new Image();
@@ -444,9 +494,10 @@ function compressImage(file) {
   });
 }
 
-// ---------- שמירה ----------
+// ---------------- SAVE ----------------
 async function saveProfile() {
-  await supabaseClient.auth.getSession();
+
+  if (!validate()) return;
 
   const { data: { user } } = await supabaseClient.auth.getUser();
 
@@ -460,14 +511,9 @@ async function saveProfile() {
   const religion = document.getElementById("religion").value;
   const about = document.getElementById("about").value;
 
-  if (!first_name || !last_name || !age || !phone || !origin || !religion) {
-    alert("מלא את כל שדות החובה");
-    return;
-  }
-
-  // ---------- העלאת תמונות ----------
   let imageUrls = [];
 
+  // העלאת תמונות
   for (let img of images) {
     const fileName = `${user.id}/${Date.now()}-${img.name}`;
 
@@ -484,7 +530,7 @@ async function saveProfile() {
     }
   }
 
-  // ---------- שמירה ----------
+  // שמירה DB
   const { error } = await supabaseClient
     .from("profiles")
     .upsert({
