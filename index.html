@@ -301,10 +301,34 @@ display: flex;
     border-radius: 2px;
     padding: 2px 6px;
     font-size: 10px;
-    
-    
   }
+.profile-banner {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 3000;
+}
 
+.profile-banner.show {
+  display: flex;
+}
+
+.banner-box {
+  background: white;
+  padding: 25px;
+  border-radius: 16px;
+  text-align: center;
+  width: 90%;
+  max-width: 320px;
+}
+
+.banner-actions {
+  display: flex;
+  gap: 10px;
+}
   </style>
 </head>
 <body>
@@ -348,14 +372,22 @@ display: flex;
     <a href="#">אודות</a>
     
   </aside>
-
-   
-
   <!-- תוכן -->
   <main class="page">
       <div class="cards"></div>
   </main>
     
+    <div id="profileBanner" class="profile-banner">
+  <div class="banner-box">
+    <h3>התחברת בהצלחה 🎉</h3>
+    <p>כדי להופיע באתר, המשך למילוי פרטי הכרטיס</p>
+
+    <div class="banner-actions">
+      <button onclick="goToProfile()" class="btn-main">המשך למילוי</button>
+      <button onclick="closeBanner()" class="btn-light">מאוחר יותר</button>
+    </div>
+  </div>
+</div>
     
     <script>
    
@@ -442,6 +474,18 @@ document.head.appendChild(script);
   `;
 }
     
+    function showProfileBanner() {
+  document.getElementById("profileBanner").classList.add("show");
+}
+
+function closeBanner() {
+  document.getElementById("profileBanner").classList.remove("show");
+}
+
+function goToProfile() {
+  window.location.href = "infouser1.html";
+}
+    
     async function checkProfile(user) {
   const { data, error } = await supabaseClient
     .from("profiles")
@@ -454,8 +498,8 @@ document.head.appendChild(script);
   }
 
   if (!data) {
-    window.location.href = "https://kuby456.github.io/Oren-sidohim555/infouser1.html";
-  }
+  showProfileBanner();
+}
 }
     
     
