@@ -371,28 +371,28 @@ display: flex;
     
     <script>
    
-function loadSupabaseAndInit(callback) {
-  const script = document.createElement("script");
-  script.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+const script = document.createElement("script");
+script.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
 
-  script.onload = () => {
-    const supabase = window.supabase.createClient(
-      "https://gpdkkjvppcsyqcdfbfyd.supabase.co",
-      "sb_publishable_f5nIFbWwsTLCroOegC8vmw_WTxoEeeA",
-      {
-        auth: {
-          persistSession: true,
-          autoRefreshToken: true,
-          detectSessionInUrl: true
-        }
-      }
-    );
+script.onload = async () => {
 
-    callback(supabase);
-  };
+  const supabaseClient = window.supabase.createClient(
+    "https://gpdkkjvppcsyqcdfbfyd.supabase.co",
+    "sb_publishable_f5nIFbWwsTLCroOegC8vmw_WTxoEeeA"
+  );
 
-  document.head.appendChild(script);
-}
+  window.supabaseClient = supabaseClient;
+
+  const { data: { user } } = await supabaseClient.auth.getUser();
+
+  if (user) {
+    showUser(user);
+    await checkProfile(user);
+  }
+};
+
+document.head.appendChild(script);
+
 
 // שימוש
 
@@ -434,6 +434,12 @@ hearts.forEach(heart => {
 });
     
     async function signInWithGoogle() {
+  if (!window.supabaseClient) return;
+
+  const { data: { user } } = await supabaseClient.auth.getUser();
+
+  if (user) return; // כבר מחובר
+
   await supabaseClient.auth.signInWithOAuth({
     provider: "google",
     options: {
@@ -445,36 +451,50 @@ hearts.forEach(heart => {
   });
 }
     
-    function showUser(user) {
+   function showUser(user) {
   const container = document.querySelector(".span654");
 
+  const name = user.user_metadata.full_name || "משתמש";
+
   container.innerHTML = `
-    <img src="${user.user_metadata.avatar_url}" 
-         style="width:40px;height:40px;border-radius:50%">
-    <span class="span6548">${user.user_metadata.full_name}</span>
+    <div style="display:flex;flex-direction:column;align-items:center;">
+      
+      <div style="
+        width:45px;
+        height:45px;
+        border-radius:50%;
+        background:#fff;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        box-shadow:0 4px 10px rgba(0,0,0,0.2);
+      ">
+        <i class="fa-solid fa-user" style="color:#7a4343;font-size:20px;"></i>
+      </div>
+
+      <span class="span6548">שלום ${name.split(" ")[0]}</span>
+    </div>
   `;
 }
-    async function checkUser() {
-  const { data } = await supabaseClient.auth.getUser();
+    
+    async function checkProfile(user) {
+  const { data, error } = await supabaseClient
+    .from("profiles")
+    .select("id")
+    .eq("id", user.id)
+    .single();
 
-  if (data.user) {
-    showUser(data.user);
+  if (error && error.code !== "PGRST116") {
+    console.log("שגיאה:", error);
+  }
+
+  if (!data) {
+    window.location.href = "/Oren-sidohim555/info-user.html";
   }
 }
     
-    loadSupabaseAndInit(async (supabase) => {
-  window.supabaseClient = supabase;
-
-  // 🔥 זה מה שחסר לך
-  await supabase.auth.getSession();
-
-  const { data } = await supabase.auth.getUser();
-
-  if (data.user) {
-    showUser(data.user);
-  }
-});
-
+    
+    
 
   </script>
 
