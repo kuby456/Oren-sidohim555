@@ -440,7 +440,7 @@ hearts.forEach(heart => {
 });
     
     async function signInWithGoogle() {
-  await supabase.auth.signInWithOAuth({
+  await supabaseClient.auth.signInWithOAuth({
     provider: "google",
     options: {
       redirectTo: window.location.origin
