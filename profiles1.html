@@ -3,120 +3,192 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>פרופילים</title>
+<title>פרופיל</title>
 
 <style>
 body {
-  margin: 0;
   font-family: Arial;
+  margin: 0;
   background: #f4f1ea;
+}
+
+/* קונטיינר */
+.profile {
+  max-width: 600px;
+  margin: auto;
+  background: white;
   padding: 20px;
 }
 
-/* גריד */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 15px;
-}
-
-/* כרטיס */
-.card {
-  background: white;
-  border-radius: 14px;
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-/* תמונה */
-.card img {
+/* תמונה ראשית */
+.main-img {
   width: 100%;
-  height: 180px;
+  height: 300px;
   object-fit: cover;
   background: #ddd;
 }
 
-/* תוכן */
-.content {
-  padding: 10px;
+/* גלריה */
+.gallery {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  overflow-x: auto;
 }
 
+.gallery img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.gallery img:hover {
+  border-color: black;
+}
+
+/* טקסט */
 .name {
-  font-size: 18px;
+  font-size: 26px;
   font-weight: bold;
-  color: #333;
+  margin-top: 15px;
 }
 
 .meta {
-  font-size: 13px;
-  color: #777;
-  margin: 4px 0;
+  color: #666;
+  margin-top: 5px;
 }
 
-.about {
-  font-size: 13px;
-  color: #444;
-  margin-top: 6px;
+.section {
+  margin-top: 20px;
+}
+
+.label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.value {
+  color: #333;
 }
 </style>
 </head>
 
 <body>
 
-<h2>משתמשים</h2>
+<div class="profile">
 
-<div id="grid" class="grid"></div>
+  <img id="mainImage" class="main-img">
+
+  <div class="gallery" id="gallery"></div>
+
+  <div class="name" id="name"></div>
+  <div class="meta" id="meta"></div>
+
+  <div class="section">
+    <div class="label">מוצא</div>
+    <div class="value" id="origin"></div>
+  </div>
+
+  <div class="section">
+    <div class="label">גובה</div>
+    <div class="value" id="height"></div>
+  </div>
+
+  <div class="section">
+    <div class="label">רמה דתית</div>
+    <div class="value" id="religion"></div>
+  </div>
+
+  <div class="section">
+    <div class="label">קצת עליי</div>
+    <div class="value" id="about"></div>
+  </div>
+
+  <div class="section">
+    <div class="label">טלפון</div>
+    <div class="value" id="phone"></div>
+  </div>
+
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
+// ------------------- חיבור לסופאבייס -------------------
 const supabaseClient = supabase.createClient(
   "https://gpdkkjvppcsyqcdfbfyd.supabase.co",
   "sb_publishable_f5nIFbWwsTLCroOegC8vmw_WTxoEeeA"
 );
 
-loadProfiles();
+// ------------------- קבלת ID -------------------
+const params = new URLSearchParams(window.location.search);
+const userId = params.get("id");
 
-async function loadProfiles() {
+console.log("userId:", userId);
+
+// אם אין ID → חזרה
+if (!userId) {
+  alert("אין מזהה פרופיל");
+  window.location.href = "index.html";
+}
+
+// ------------------- טעינה -------------------
+loadProfile();
+
+async function loadProfile() {
 
   const { data, error } = await supabaseClient
     .from("profiles")
-    .select("*");
+    .select("*")
+    .eq("id", userId)
+    .limit(1);
 
-  if (error) {
-    console.log(error);
+  if (error || !data || data.length === 0) {
+    alert("לא נמצא פרופיל");
     return;
   }
 
-  const grid = document.getElementById("grid");
-  grid.innerHTML = "";
+  const user = data[0];
 
-  data.forEach(user => {
+  // ------------------- טקסט -------------------
+  document.getElementById("name").innerText =
+    `${user.first_name || ""} ${user.last_name || ""} · ${user.age || ""}`;
 
-    const card = document.createElement("div");
-    card.className = "card";
+  document.getElementById("meta").innerText =
+    `${user.city || ""} · ${user.religion || ""}`;
 
-    const img = document.createElement("img");
+  document.getElementById("origin").innerText = user.origin || "-";
+  document.getElementById("height").innerText =
+    user.height ? user.height + " ס״מ" : "-";
+  document.getElementById("religion").innerText = user.religion || "-";
+  document.getElementById("about").innerText = user.about || "-";
+  document.getElementById("phone").innerText = user.phone || "-";
 
-    // אם יש תמונה
-    if (user.images && user.images.length > 0) {
-      img.src = user.images[0];
-    } else {
-      img.src = "https://via.placeholder.com/300x200?text=No+Image";
-    }
+  // ------------------- תמונות -------------------
+  const images = Array.isArray(user.images) ? user.images : [];
 
-    const content = document.createElement("div");
-    content.className = "content";
+  const mainImage = document.getElementById("mainImage");
 
-    content.innerHTML = `
-      <div class="name">${user.first_name || ""} ${user.last_name || ""} · ${user.age || ""}</div>
-      <div class="meta">${user.origin || ""} · ${user.religion || ""}</div>
-      <div class="about">${user.about || ""}</div>
-    `;
+  if (images.length > 0) {
+    mainImage.src = images[0];
+  } else {
+    mainImage.src = "https://via.placeholder.com/600x300?text=No+Image";
+  }
 
-    card.appendChild(img);
-    card.appendChild(content);
-    grid.appendChild(card);
+  const gallery = document.getElementById("gallery");
+  gallery.innerHTML = "";
+
+  images.forEach(img => {
+    const image = document.createElement("img");
+    image.src = img;
+
+    image.onclick = () => {
+      mainImage.src = img;
+    };
+
+    gallery.appendChild(image);
   });
 }
 </script>
