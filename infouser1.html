@@ -405,10 +405,20 @@ async function checkProfile(user) {
 
 // ---------------- VALIDATION ----------------
 function setupValidation() {
-  document.querySelectorAll("input, select").forEach(input => {
-    input.addEventListener("input", () => {
+  const requiredFields = [
+    "first_name",
+    "last_name",
+    "age",
+    "origin",
+    "religion",
+    "phone"
+  ];
 
-      const error = input.parentElement.querySelector(".required"); // 🔥 חסר לך
+  requiredFields.forEach(id => {
+    const input = document.getElementById(id);
+
+    input.addEventListener("input", () => {
+      const error = input.parentElement.querySelector(".required");
 
       if (!input.value.trim()) {
         if (error) error.style.display = "block";
@@ -417,7 +427,6 @@ function setupValidation() {
         if (error) error.style.display = "none";
         input.style.borderColor = "#ccc";
       }
-
     });
   });
 }
