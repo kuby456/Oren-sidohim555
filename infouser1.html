@@ -159,13 +159,12 @@ div[style*="display:flex;gap:10px"] {
   text-align: center;
   padding: 10px;
   border-radius: 6px; /* מרובע עדין */
-  background: #ffffff;
-  color: #43579b;
-  font-size: 15px;
+  background: #4338ca;
+  color: white;
+  font-size: 14px;
   cursor: pointer;
   transition: 0.2s;
-  border: 2px solid #43579b;
-  font-weight: 500;
+  border: 1px solid #3730a3;
 }
 .upload-btn {
   display: flex;
@@ -174,17 +173,14 @@ div[style*="display:flex;gap:10px"] {
   gap: 6px;
 }
 
-.icon { 
+.icon {
   width: 50px;
   height: 50px;
-  fill: #43579b;
+  fill: white;
 }
 .upload-btn:hover {
   background: #3730a3;
-  color: white;
 }
-
-
 
 .upload-btn:active {
   transform: scale(0.95);
@@ -240,7 +236,7 @@ div[style*="display:flex;gap:10px"] {
   </div>
 
   <div class="field">
-    <label>שם משפחה (לא חובה)</label>
+    <label>שם משפחה</label>
     <input id="last_name">
     </div>
 
@@ -413,8 +409,6 @@ function setupValidation() {
     input.addEventListener("input", () => {
       const error = input.parentElement.querySelector(".required");
 
-      if (!error) return; // 👈 זה הפתרון
-
       if (input.value.trim()) {
         error.style.display = "none";
         input.style.borderColor = "#ccc";
@@ -422,30 +416,32 @@ function setupValidation() {
     });
   });
 }
+
 function validate() {
   let valid = true;
 
- const requiredFields = [
-  "first_name",
-  "age",
-  "origin",
-  "religion",
-  "phone"
-];
+  const requiredFields = [
+    "first_name",
+    "last_name",
+    "age",
+    "origin",
+    "religion",
+    "phone"
+  ];
 
-requiredFields.forEach(id => {
-  const input = document.getElementById(id);
-  const error = input.parentElement.querySelector(".required");
+  requiredFields.forEach(id => {
+    const input = document.getElementById(id);
+    const error = input.parentElement.querySelector(".required");
 
-  if (!input.value.trim()) {
-    if (error) error.style.display = "block"; // 👈 רק אם קיים
-    input.style.borderColor = "red";
-    valid = false;
-  } else {
-    if (error) error.style.display = "none";
-    input.style.borderColor = "#ccc";
-  }
-});
+    if (!input.value.trim()) {
+      error.style.display = "block";
+      input.style.borderColor = "red";
+      valid = false;
+    } else {
+      error.style.display = "none";
+      input.style.borderColor = "#ccc";
+    }
+  });
 
   return valid;
 }
@@ -553,7 +549,6 @@ async function saveProfile() {
   if (!validate()) return;
 
   const { data: { user } } = await supabaseClient.auth.getUser();
-console.log("user:", user);
 
   const first_name = document.getElementById("first_name").value.trim();
   const last_name = document.getElementById("last_name").value.trim();
@@ -607,7 +602,6 @@ console.log("user:", user);
     alert("שגיאה בשמירה");
   }
 }
-
 </script>
 
 </body>
