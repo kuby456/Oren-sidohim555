@@ -407,12 +407,17 @@ async function checkProfile(user) {
 function setupValidation() {
   document.querySelectorAll("input, select").forEach(input => {
     input.addEventListener("input", () => {
-      const error = input.parentElement.querySelector(".required");
 
-      if (input.value.trim()) {
-        error.style.display = "none";
+      const error = input.parentElement.querySelector(".required"); // 🔥 חסר לך
+
+      if (!input.value.trim()) {
+        if (error) error.style.display = "block";
+        input.style.borderColor = "red";
+      } else {
+        if (error) error.style.display = "none";
         input.style.borderColor = "#ccc";
       }
+
     });
   });
 }
@@ -433,12 +438,12 @@ function validate() {
     const input = document.getElementById(id);
     const error = input.parentElement.querySelector(".required");
 
-    if (!input.value.trim()) {
-      error.style.display = "block";
+    if (!input.value.trim()) { // 🔥 אם ריק
+      if (error) error.style.display = "block";
       input.style.borderColor = "red";
       valid = false;
     } else {
-      error.style.display = "none";
+      if (error) error.style.display = "none";
       input.style.borderColor = "#ccc";
     }
   });
