@@ -117,35 +117,59 @@ let currentData = {};
 let editingField = "";
 let newValue = "";
 
+// ---------------- LOAD PROFILE ----------------
 async function loadProfile() {
 
   const { data: { user } } = await supabase.auth.getUser();
+
+  console.log("USER:", user);
+
+  if (!user) {
+    alert("אין משתמש מחובר");
+    window.location.href = "index.html";
+    return;
+  }
+
   currentUser = user;
 
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("profiles")
     .select("*")
     .eq("id", user.id)
-    .single();
+    .maybeSingle(); // 🔥 תיקון חשוב
 
-  if (data) {
-    currentData = data;
-    renderFields();
-  } else {
+  console.log("PROFILE DATA:", data);
+  console.log("ERROR:", error);
+
+  if (error) {
+    alert("שגיאה בטעינת פרופיל");
+    return;
+  }
+
+  if (!data) {
     alert("אין פרופיל! מעביר למילוי...");
     window.location.href = "infouser1.html";
+    return;
   }
+
+  currentData = data;
+  renderFields();
 }
 
+// ---------------- RENDER ----------------
 function renderFields() {
   const container = document.getElementById("fields");
   container.innerHTML = "";
 
   const fields = [
-    { key: "first_name", label: "שם" },
+    { key: "first_name", label: "שם פרטי" },
+    { key: "last_name", label: "שם משפחה" },
     { key: "age", label: "גיל" },
-    { key: "city", label: "עיר" },
-    { key: "religion", label: "דת" }
+    { key: "height", label: "גובה" },
+    { key: "origin", label: "מוצא" }, // 🔥 תיקון במקום city
+    { key: "religion", label: "דת" },
+    { key: "phone", label: "טלפון" },
+    { key: "about", label: "עליי" }
   ];
 
   fields.forEach(f => {
@@ -158,6 +182,7 @@ function renderFields() {
   });
 }
 
+// ---------------- START EDIT ----------------
 function startEdit(field, label) {
   editingField = field;
 
@@ -168,11 +193,13 @@ function startEdit(field, label) {
   document.getElementById("editInput").value = currentData[field] || "";
 }
 
+// ---------------- CANCEL ----------------
 function cancelEdit() {
   document.getElementById("editor").style.display = "none";
   document.getElementById("fields").style.display = "block";
 }
 
+// ---------------- CONFIRM ----------------
 function confirmEdit() {
   newValue = document.getElementById("editInput").value;
 
@@ -182,16 +209,24 @@ function confirmEdit() {
   document.getElementById("confirmBanner").style.display = "flex";
 }
 
+// ---------------- CLOSE BANNER ----------------
 function closeBanner() {
   document.getElementById("confirmBanner").style.display = "none";
 }
 
+// ---------------- APPLY EDIT ----------------
 async function applyEdit() {
 
-  await supabase
+  const { error } = await supabase
     .from("profiles")
     .update({ [editingField]: newValue })
     .eq("id", currentUser.id);
+
+  if (error) {
+    alert("שגיאה בעדכון");
+    console.log(error);
+    return;
+  }
 
   currentData[editingField] = newValue;
 
@@ -200,6 +235,7 @@ async function applyEdit() {
   renderFields();
 }
 
+// ---------------- INIT ----------------
 loadProfile();
 </script>
 
