@@ -521,8 +521,25 @@ function closeBanner() {
   document.getElementById("profileBanner").classList.remove("show");
 }
 
-function goToProfile() {
-  window.location.href = "infouser1.html";
+async function goToProfile() {
+
+  const user = (await window.supabaseClient.auth.getUser()).data.user;
+
+  if (!user) return;
+
+  const { data } = await window.supabaseClient
+    .from("profiles")
+    .select("id")
+    .eq("id", user.id)
+    .single();
+
+  if (data) {
+    // ✔ יש פרופיל → עריכה
+    window.location.href = "edituser.html";
+  } else {
+    // ❌ אין פרופיל → מילוי ראשוני
+    window.location.href = "infouser1.html";
+  }
 }
     
     async function checkProfile(user) {
