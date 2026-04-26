@@ -104,23 +104,36 @@ input {
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script>
-const supabase = window.supabase.createClient(
-  "https://gpdkkjvppcsyqcdfbfyd.supabase.co",
-  "sb_publishable_f5nIFbWwsTLCroOegC8vmw_WTxoEeeA"
-);
+const script = document.createElement("script");
+script.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
 
+script.onload = async () => {
+
+  const supabaseClient = window.supabase.createClient(
+    "https://gpdkkjvppcsyqcdfbfyd.supabase.co",
+    "sb_publishable_f5nIFbWwsTLCroOegC8vmw_WTxoEeeA"
+  );
+
+  window.supabaseClient = supabaseClient;
+
+  await loadProfile(); // 🔥 טוען נתונים אחרי שהספרייה מוכנה
+};
+
+document.head.appendChild(script);
+
+
+// ================= GLOBALS =================
 let currentUser;
 let currentData = {};
 let editingField = "";
 let newValue = "";
 
-// ---------------- LOAD PROFILE ----------------
+
+// ================= LOAD PROFILE =================
 async function loadProfile() {
 
-  const { data: { user } } = await supabase.auth.getUser();
+  const { data: { user } } = await window.supabaseClient.auth.getUser();
 
   console.log("USER:", user);
 
@@ -132,11 +145,11 @@ async function loadProfile() {
 
   currentUser = user;
 
-  const { data, error } = await supabase
+  const { data, error } = await window.supabaseClient
     .from("profiles")
     .select("*")
     .eq("id", user.id)
-    .maybeSingle(); // 🔥 תיקון חשוב
+    .maybeSingle();
 
   console.log("PROFILE DATA:", data);
   console.log("ERROR:", error);
@@ -156,7 +169,8 @@ async function loadProfile() {
   renderFields();
 }
 
-// ---------------- RENDER ----------------
+
+// ================= RENDER =================
 function renderFields() {
   const container = document.getElementById("fields");
   container.innerHTML = "";
@@ -166,7 +180,7 @@ function renderFields() {
     { key: "last_name", label: "שם משפחה" },
     { key: "age", label: "גיל" },
     { key: "height", label: "גובה" },
-    { key: "origin", label: "מוצא" }, // 🔥 תיקון במקום city
+    { key: "origin", label: "מוצא" },
     { key: "religion", label: "דת" },
     { key: "phone", label: "טלפון" },
     { key: "about", label: "עליי" }
@@ -182,7 +196,8 @@ function renderFields() {
   });
 }
 
-// ---------------- START EDIT ----------------
+
+// ================= START EDIT =================
 function startEdit(field, label) {
   editingField = field;
 
@@ -193,13 +208,15 @@ function startEdit(field, label) {
   document.getElementById("editInput").value = currentData[field] || "";
 }
 
-// ---------------- CANCEL ----------------
+
+// ================= CANCEL =================
 function cancelEdit() {
   document.getElementById("editor").style.display = "none";
   document.getElementById("fields").style.display = "block";
 }
 
-// ---------------- CONFIRM ----------------
+
+// ================= CONFIRM =================
 function confirmEdit() {
   newValue = document.getElementById("editInput").value;
 
@@ -209,15 +226,17 @@ function confirmEdit() {
   document.getElementById("confirmBanner").style.display = "flex";
 }
 
-// ---------------- CLOSE BANNER ----------------
+
+// ================= CLOSE =================
 function closeBanner() {
   document.getElementById("confirmBanner").style.display = "none";
 }
 
-// ---------------- APPLY EDIT ----------------
+
+// ================= APPLY =================
 async function applyEdit() {
 
-  const { error } = await supabase
+  const { error } = await window.supabaseClient
     .from("profiles")
     .update({ [editingField]: newValue })
     .eq("id", currentUser.id);
@@ -234,9 +253,6 @@ async function applyEdit() {
   cancelEdit();
   renderFields();
 }
-
-// ---------------- INIT ----------------
-loadProfile();
 </script>
 
 </body>
