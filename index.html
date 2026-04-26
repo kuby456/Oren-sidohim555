@@ -331,6 +331,16 @@ display: flex;
   align-items: center;
   gap: 50px;
 }
+  .profile-banner .banner-box {
+  transform: scale(0.9);
+  opacity: 0;
+  transition: 0.2s;
+}
+
+.profile-banner.show .banner-box {
+  transform: scale(1);
+  opacity: 1;
+}
   </style>
 </head>
 <body>
@@ -390,7 +400,17 @@ display: flex;
     </div>
   </div>
 </div>
-    
+    <div id="userMenu" class="profile-banner">
+  <div class="banner-box">
+    <h3>מה תרצה לעשות?</h3>
+
+    <div style="display:flex;flex-direction:column;gap:10px;margin-top:15px;">
+      <button onclick="goToProfile()" class="btn-main">עריכת פרופיל</button>
+      <button onclick="logout()" class="btn-light">יציאה מהאתר</button>
+      <button onclick="closeUserMenu()" class="btn-light">ביטול</button>
+    </div>
+  </div>
+</div>
 <script>
 const script = document.createElement("script");
 script.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
@@ -449,13 +469,30 @@ document.head.appendChild(script);
   });
 }
     
-   function showUser(user) {
+   async function showUser(user) {
   const container = document.querySelector(".span654");
 
   const name = user.user_metadata.full_name || "משתמש";
 
+  // שליפת פרופיל מהדאטהבייס
+  const { data } = await window.supabaseClient
+    .from("profiles")
+    .select("images")
+    .eq("id", user.id)
+    .single();
+
+  let profileImg = "";
+
+  if (data && Array.isArray(data.images) && data.images[0]) {
+    profileImg = `<img src="${data.images[0]}" 
+      style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
+  } else {
+    profileImg = `<i class="fa-solid fa-user" style="color:#7a4343;font-size:20px;"></i>`;
+  }
+
   container.innerHTML = `
-    <div style="display:flex;flex-direction:column;align-items:center;">
+    <div class="user-profile-btn" onclick="openUserMenu()"
+      style="display:flex;flex-direction:column;align-items:center;cursor:pointer;">
       
       <div style="
         width:45px;
@@ -466,8 +503,9 @@ document.head.appendChild(script);
         align-items:center;
         justify-content:center;
         box-shadow:0 4px 10px rgba(0,0,0,0.2);
+        overflow:hidden;
       ">
-        <i class="fa-solid fa-user" style="color:#7a4343;font-size:20px;"></i>
+        ${profileImg}
       </div>
 
       <span class="span6548">שלום ${name.split(" ")[0]}</span>
@@ -559,7 +597,18 @@ document.querySelectorAll(".saveBtn").forEach(heart => {
   });
 });
 }
+function openUserMenu() {
+  document.getElementById("userMenu").classList.add("show");
+}
 
+function closeUserMenu() {
+  document.getElementById("userMenu").classList.remove("show");
+}
+
+async function logout() {
+  await window.supabaseClient.auth.signOut();
+  location.reload();
+}
   </script>
 
 </body>
