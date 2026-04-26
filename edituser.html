@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>עריכת פרופיל</title>
+
+<style>
+body {
+  font-family: Arial;
+  background: #f4f1ea;
+  padding: 15px;
+}
+
+.container {
+  max-width: 400px;
+  margin: auto;
+}
+
+.field {
+  background: white;
+  padding: 12px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.edit-btn {
+  background: #7a4343;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 8px;
+}
+
+.editor {
+  display: none;
+  text-align: center;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
+
+.btn-main {
+  background: #7a4343;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.banner {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.banner-box {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h2>עריכת פרופיל</h2>
+
+  <div id="fields"></div>
+
+  <!-- מסך עריכה -->
+  <div id="editor" class="editor">
+    <h3 id="editTitle"></h3>
+    <input id="editInput" type="text">
+    <button class="btn-main" onclick="confirmEdit()">שמור שינוי</button>
+    <button class="btn-main" onclick="cancelEdit()">ביטול</button>
+  </div>
+
+</div>
+
+<!-- באנר אישור -->
+<div id="confirmBanner" class="banner">
+  <div class="banner-box">
+    <p id="confirmText"></p>
+    <button onclick="applyEdit()">אישור</button>
+    <button onclick="closeBanner()">ביטול</button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const supabase = window.supabase.createClient(
+  "https://gpdkkjvppcsyqcdfbfyd.supabase.co",
+  "sb_publishable_f5nIFbWwsTLCroOegC8vmw_WTxoEeeA"
+);
+
+let currentUser;
+let currentData = {};
+let editingField = "";
+let newValue = "";
+
+async function loadProfile() {
+
+  const { data: { user } } = await supabase.auth.getUser();
+  currentUser = user;
+
+  const { data } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("id", user.id)
+    .single();
+
+  if (data) {
+    currentData = data;
+    renderFields();
+  } else {
+    alert("אין פרופיל! מעביר למילוי...");
+    window.location.href = "infouser1.html";
+  }
+}
+
+function renderFields() {
+  const container = document.getElementById("fields");
+  container.innerHTML = "";
+
+  const fields = [
+    { key: "first_name", label: "שם" },
+    { key: "age", label: "גיל" },
+    { key: "city", label: "עיר" },
+    { key: "religion", label: "דת" }
+  ];
+
+  fields.forEach(f => {
+    container.innerHTML += `
+      <div class="field">
+        <span>${f.label}: ${currentData[f.key] || "-"}</span>
+        <button class="edit-btn" onclick="startEdit('${f.key}','${f.label}')">עריכה</button>
+      </div>
+    `;
+  });
+}
+
+function startEdit(field, label) {
+  editingField = field;
+
+  document.getElementById("fields").style.display = "none";
+  document.getElementById("editor").style.display = "block";
+
+  document.getElementById("editTitle").innerText = "עריכת " + label;
+  document.getElementById("editInput").value = currentData[field] || "";
+}
+
+function cancelEdit() {
+  document.getElementById("editor").style.display = "none";
+  document.getElementById("fields").style.display = "block";
+}
+
+function confirmEdit() {
+  newValue = document.getElementById("editInput").value;
+
+  document.getElementById("confirmText").innerText =
+    `האם אתה בטוח שברצונך לשנות ל: "${newValue}"?`;
+
+  document.getElementById("confirmBanner").style.display = "flex";
+}
+
+function closeBanner() {
+  document.getElementById("confirmBanner").style.display = "none";
+}
+
+async function applyEdit() {
+
+  await supabase
+    .from("profiles")
+    .update({ [editingField]: newValue })
+    .eq("id", currentUser.id);
+
+  currentData[editingField] = newValue;
+
+  closeBanner();
+  cancelEdit();
+  renderFields();
+}
+
+loadProfile();
+</script>
+
+</body>
+</html>
