@@ -16,25 +16,445 @@ padding:18px;
 color:#fff;
 }
 
-.topbar{
+
+.modeBtn{background:#ffffff22;color:#fff;}
+.modeBtn.active{background:#00bcd4;color:#fff;}
+.editBtn{background:#18a558;color:#fff;}
+
+.wrap{
 max-width:430px;
 margin:auto;
-display:grid;
-grid-template-columns:1fr 1fr 1fr;
-gap:8px;
-margin-bottom:15px;
+transform: translateY(30px)
+
+}
+.wrap button{
+max-width:430px;
+margin:auto;
+position: relative;
+}
+.cardMini,
+.cardFull{
+background:#fff;
+color:#222;
+border-radius:22px;
+overflow:hidden;
+box-shadow:0 15px 40px rgba(0,0,0,.35);
+display:none;
+z-index: -1;
+}
+.editBtn{
+  background: linear-gradient(135deg,#9a271387,#e23b3b2b);
+  color:#171717;
+  border:none;
+  border-radius: 3px;
+  padding: 10px 8px;
+  font-size: 15px;
+  font-weight: bolder;
+  cursor:pointer;
+  transition:0.25s ease;
 }
 
-.topbar button{
-border:none;
-padding:14px 10px;
-border-radius:14px;
-font-size:15px;
-font-weight:bold;
+.editBtn:hover{
+  transform:translateY(-1px);
+  filter:brightness(1.05);
+}
+
+.editBtn:active{
+  transform:scale(0.98);
+}
+
+.editBtn:focus{
+  outline:none;
+}
+/* מצב אינדקס */
+.cardMini{
+position:relative;
+display:block;
 cursor:pointer;
 }
 
-.modeBtn{background:#ffffff22;color:#fff;}
+.cardMini .img{
+height:120px;
+}
+
+.cardMini .img img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+.cardMini .miniBody{
+padding:14px;
+}
+
+.cardMini .miniName{
+font-size:22px;
+font-weight:bold;
+color:#4d2a2a;
+margin-bottom:5px;
+}
+
+.cardMini .miniMeta{
+font-size:14px;
+color:#777;
+}
+
+/* מצב פתוח */
+.photo{
+height:420px;
+position:relative;
+}
+
+.photo img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+.overlay{
+position:absolute;
+inset:auto 0 0 0;
+padding:20px;
+background:linear-gradient(to top,rgba(0,0,0,.92),transparent);
+color:#fff;
+}
+
+.name{
+font-size:28px;
+font-weight:bold;
+}
+
+.meta{
+opacity:.85;
+margin-top:5px;
+}
+
+.body2{
+padding:16px;
+background:#ffffff10;
+}
+
+.box{
+background:#fff;
+color:#222;
+padding:14px;
+border-radius:16px;
+margin-bottom:12px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+}
+
+.small{
+background:#fff;
+color:#222;
+padding:12px;
+border-radius:16px;
+}
+
+.label{
+font-size:12px;
+color:#777;
+margin-bottom:4px;
+}
+
+/* קופסה ראשית */
+.classic-toggle{
+display:flex;
+position:relative;
+width:100%;
+max-width:430px;
+margin:auto;
+padding:4px;
+border-radius:18px;
+background:rgba(255,255,255,0.12);
+backdrop-filter:blur(10px);
+box-shadow:0 8px 24px rgba(0,0,0,.25);
+}
+
+/* כפתורים */
+.modeBtn{
+flex:1;
+height:48px;
+border:none;
+background:transparent;
+color:rgba(255,255,255,.75);
+font-size:15px;
+font-weight:700;
+border-radius:14px;
+cursor:pointer;
+position:relative;
+z-index:2;
+transition:.25s;
+white-space:nowrap;
+padding:0 10px;
+}
+
+/* פעיל */
+.modeBtn.active{
+color:#fff;
+}
+
+/* hover */
+.modeBtn:hover{
+color:#fff;
+}
+
+/* סליידר */
+.slider{
+position:absolute;
+top:4px;
+right:4px;
+width:calc(50% - 4px);
+height:48px;
+border-radius:14px;
+background:linear-gradient(135deg,#00bcd4,#2196f3);
+box-shadow:
+0 6px 18px rgba(0,0,0,.25),
+inset 0 1px 2px rgba(255,255,255,.3);
+transition:transform .32s ease;
+z-index:1;
+
+}
+
+/* מצב שמאל */
+.classic-toggle.left .slider{
+transform:translateX(0);
+}
+
+/* מצב ימין */
+.classic-toggle.right .slider{
+transform:translateX(-100%);
+}
+</style>
+</head>
+<body>
+  <!-- HTML -->
+<div class="stylbuttons1 classic-toggle">
+
+  <button id="btnMini" class="modeBtn active" onclick="showMini()">
+    תצוגת אינדקס
+  </button>
+
+  <button id="btnFull" class="modeBtn" onclick="showFull()">
+    פרופיל פתוח
+  </button>
+
+  <div class="slider"></div>
+
+</div>
+
+
+
+<div class="wrap">
+
+<!-- מצב ראשון -->
+<div class="cardMini" id="miniCard" onclick="showFull()">
+    <button class="editBtn" onclick="location.href='edituser.html'">עריכת פרופיל</button>
+<div class="img">
+<img id="miniImage">
+
+</div>
+
+<div class="miniBody">
+<div class="miniName" id="miniName">טוען...</div>
+<div class="miniMeta" id="miniMeta"></div>
+</div>
+</div>
+
+<!-- מצב שני -->
+<div class="cardFull" id="fullCard">
+<button class="editBtn" onclick="location.href='edituser.html'">עריכת פרופיל</button>
+
+<div class="photo">
+<img id="mainImage">
+
+<div class="overlay">
+<div class="name" id="name">טוען...</div>
+<div class="meta" id="meta"></div>
+</div>
+</div>
+
+<div class="body2">
+
+<div class="box" id="about">טוען...</div>
+
+<div class="grid">
+<div class="small">
+<div class="label">גובה</div>
+<div id="height"></div>
+</div>
+
+<div class="small">
+<div class="label">מוצא</div>
+<div id="origin"></div>
+</div>
+
+<div class="small">
+<div class="label">דת</div>
+<div id="religion"></div>
+</div>
+
+<div class="small">
+<div class="label">טלפון</div>
+<div id="phone"></div>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+
+<script>
+const script = document.createElement("script");
+script.src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+
+script.onload = async ()=>{
+
+const supabaseClient = window.supabase.createClient(
+"https://gpdkkjvppcsyqcdfbfyd.supabase.co",
+"sb_publishable_f5nIFbWwsTLCroOegC8vmw_WTxoEeeA"
+);
+
+window.supabaseClient = supabaseClient;
+
+/* await loadMyProfile(); */
+
+};
+
+document.head.appendChild(script);
+
+
+
+async function loadMyProfile(){
+
+const { data:{ user } } = await window.supabaseClient.auth.getUser();
+
+if(!user){
+alert("אין משתמש מחובר");
+location.href="index.html";
+return;
+}
+
+const { data,error } = await window.supabaseClient
+.from("profiles")
+.select("*")
+.eq("id",user.id)
+.maybeSingle();
+
+if(error || !data){
+alert("לא נמצא פרופיל");
+location.href="infouser1.html";
+return;
+}
+
+fillData(data);
+
+}
+
+
+
+function fillData(user){
+
+const imgs = Array.isArray(user.images) ? user.images : [];
+const img = imgs.length ? imgs[0] : "https://via.placeholder.com/600x400?text=No+Image";
+
+/* מצב אינדקס */
+document.getElementById("miniImage").src = img;
+document.getElementById("miniName").innerText =
+`${user.first_name || ""} · ${user.age || ""}`;
+
+document.getElementById("miniMeta").innerText =
+`${user.city || ""} ${user.religion ? "· "+user.religion : ""}`;
+
+/* מצב פתוח */
+document.getElementById("mainImage").src = img;
+
+document.getElementById("name").innerText =
+`${user.first_name || ""} ${user.last_name || ""} · ${user.age || ""}`;
+
+document.getElementById("meta").innerText =
+`${user.city || ""} ${user.religion ? "· "+user.religion : ""}`;
+
+document.getElementById("about").innerText = user.about || "-";
+document.getElementById("height").innerText = user.height ? user.height+" ס״מ" : "-";
+document.getElementById("origin").innerText = user.origin || "-";
+document.getElementById("religion").innerText = user.religion || "-";
+document.getElementById("phone").innerText = user.phone || "-";
+
+}
+
+
+
+function showMini(){
+document.getElementById("miniCard").style.display="block";
+document.getElementById("fullCard").style.display="none";
+
+document.getElementById("btnMini").classList.add("active");
+document.getElementById("btnFull").classList.remove("active");
+}
+
+function showFull(){
+document.getElementById("miniCard").style.display="none";
+document.getElementById("fullCard").style.display="block";
+
+document.getElementById("btnFull").classList.add("active");
+document.getElementById("btnMini").classList.remove("active");
+}
+
+/* JS */
+
+function updateToggle(side){
+
+const box = document.querySelector(".classic-toggle");
+
+document.querySelectorAll(".modeBtn").forEach(btn=>{
+btn.classList.remove("active");
+});
+
+if(side === "left"){
+document.getElementById("btnMini").classList.add("active");
+box.classList.remove("right");
+box.classList.add("left");
+}else{
+document.getElementById("btnFull").classList.add("active");
+box.classList.remove("left");
+box.classList.add("right");
+}
+
+}
+
+/* הפונקציות שלך */
+function showMini(){
+
+updateToggle("left");
+
+/* הקוד הקיים שלך */
+document.getElementById("miniCard").style.display="block";
+document.getElementById("fullCard").style.display="none";
+
+}
+
+function showFull(){
+
+updateToggle("right");
+
+/* הקוד הקיים שלך */
+document.getElementById("miniCard").style.display="none";
+document.getElementById("fullCard").style.display="block";
+
+}
+
+/* מצב פתיחה */
+updateToggle("left");
+</script>
+
+</body>
+</html>.modeBtn{background:#ffffff22;color:#fff;}
 .modeBtn.active{background:#00bcd4;color:#fff;}
 .editBtn{background:#18a558;color:#fff;}
 
