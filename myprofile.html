@@ -9,155 +9,209 @@
 *{box-sizing:border-box;margin:0;padding:0}
 
 body{
-  font-family:Arial,sans-serif;
-  background:linear-gradient(135deg,#1a0533,#6a4c85,#1a0533);
-  min-height:100vh;
-  padding:20px;
-  color:white;
+font-family:Arial,sans-serif;
+background:linear-gradient(135deg,#1a0533,#6a4c85,#1a0533);
+min-height:100vh;
+padding:18px;
+color:#fff;
 }
 
 .topbar{
-  max-width:420px;
-  margin:auto;
-  display:flex;
-  gap:10px;
-  margin-bottom:15px;
+max-width:430px;
+margin:auto;
+display:grid;
+grid-template-columns:1fr 1fr 1fr;
+gap:8px;
+margin-bottom:15px;
 }
 
 .topbar button{
-  flex:1;
-  border:none;
-  padding:14px;
-  border-radius:14px;
-  font-size:16px;
-  font-weight:bold;
-  cursor:pointer;
+border:none;
+padding:14px 10px;
+border-radius:14px;
+font-size:15px;
+font-weight:bold;
+cursor:pointer;
 }
 
-.editBtn{
-  background:#00bcd4;
-  color:white;
+.modeBtn{background:#ffffff22;color:#fff;}
+.modeBtn.active{background:#00bcd4;color:#fff;}
+.editBtn{background:#18a558;color:#fff;}
+
+.wrap{
+max-width:430px;
+margin:auto;
 }
 
-.profilesBtn{
-  background:#ffffff22;
-  color:white;
+.cardMini,
+.cardFull{
+background:#fff;
+color:#222;
+border-radius:22px;
+overflow:hidden;
+box-shadow:0 15px 40px rgba(0,0,0,.35);
+display:none;
 }
 
-.card{
-  max-width:420px;
-  margin:auto;
-  background:#ffffff12;
-  backdrop-filter:blur(8px);
-  border-radius:24px;
-  overflow:hidden;
-  box-shadow:0 15px 40px rgba(0,0,0,.35);
+/* מצב אינדקס */
+.cardMini{
+position:relative;
+display:block;
+cursor:pointer;
 }
 
+.cardMini .img{
+height:120px;
+}
+
+.cardMini .img img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+.cardMini .miniBody{
+padding:14px;
+}
+
+.cardMini .miniName{
+font-size:22px;
+font-weight:bold;
+color:#4d2a2a;
+margin-bottom:5px;
+}
+
+.cardMini .miniMeta{
+font-size:14px;
+color:#777;
+}
+
+/* מצב פתוח */
 .photo{
-  height:420px;
-  position:relative;
+height:420px;
+position:relative;
 }
 
 .photo img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
+width:100%;
+height:100%;
+object-fit:cover;
 }
 
 .overlay{
-  position:absolute;
-  inset:auto 0 0 0;
-  padding:20px;
-  background:linear-gradient(to top,rgba(0,0,0,.9),transparent);
+position:absolute;
+inset:auto 0 0 0;
+padding:20px;
+background:linear-gradient(to top,rgba(0,0,0,.92),transparent);
+color:#fff;
 }
 
 .name{
-  font-size:28px;
-  font-weight:bold;
+font-size:28px;
+font-weight:bold;
 }
 
 .meta{
-  opacity:.8;
-  margin-top:5px;
+opacity:.85;
+margin-top:5px;
 }
 
-.body{
-  padding:18px;
+.body2{
+padding:16px;
+background:#ffffff10;
 }
 
 .box{
-  background:white;
-  color:#222;
-  border-radius:16px;
-  padding:14px;
-  margin-bottom:12px;
+background:#fff;
+color:#222;
+padding:14px;
+border-radius:16px;
+margin-bottom:12px;
 }
 
 .grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
 }
 
 .small{
-  background:white;
-  color:#222;
-  border-radius:16px;
-  padding:12px;
+background:#fff;
+color:#222;
+padding:12px;
+border-radius:16px;
 }
 
 .label{
-  font-size:12px;
-  color:#777;
-  margin-bottom:4px;
+font-size:12px;
+color:#777;
+margin-bottom:4px;
 }
 </style>
 </head>
 <body>
 
 <div class="topbar">
-  <button class="editBtn" onclick="location.href='edituser.html'">עריכת הפרופיל</button>
-  <button class="profilesBtn" onclick="location.href='profiles.html'">לפרופיילס</button>
+<button id="btnMini" class="modeBtn active" onclick="showMini()">תצוגת אינדקס</button>
+<button id="btnFull" class="modeBtn" onclick="showFull()">פרופיל פתוח</button>
+<button class="editBtn" onclick="location.href='edituser.html'">עריכת פרופיל</button>
 </div>
 
-<div class="card">
+<div class="wrap">
 
-  <div class="photo">
-    <img id="mainImage">
-    <div class="overlay">
-      <div class="name" id="name">טוען...</div>
-      <div class="meta" id="meta"></div>
-    </div>
-  </div>
+<!-- מצב ראשון -->
+<div class="cardMini" id="miniCard" onclick="showFull()">
+<div class="img">
+<img id="miniImage">
+</div>
 
-  <div class="body">
+<div class="miniBody">
+<div class="miniName" id="miniName">טוען...</div>
+<div class="miniMeta" id="miniMeta"></div>
+</div>
+</div>
 
-    <div class="box" id="about">טוען...</div>
+<!-- מצב שני -->
+<div class="cardFull" id="fullCard">
 
-    <div class="grid">
-      <div class="small">
-        <div class="label">גובה</div>
-        <div id="height"></div>
-      </div>
+<div class="photo">
+<img id="mainImage">
 
-      <div class="small">
-        <div class="label">מוצא</div>
-        <div id="origin"></div>
-      </div>
+<div class="overlay">
+<div class="name" id="name">טוען...</div>
+<div class="meta" id="meta"></div>
+</div>
+</div>
 
-      <div class="small">
-        <div class="label">דת</div>
-        <div id="religion"></div>
-      </div>
+<div class="body2">
 
-      <div class="small">
-        <div class="label">טלפון</div>
-        <div id="phone"></div>
-      </div>
-    </div>
+<div class="box" id="about">טוען...</div>
 
-  </div>
+<div class="grid">
+<div class="small">
+<div class="label">גובה</div>
+<div id="height"></div>
+</div>
+
+<div class="small">
+<div class="label">מוצא</div>
+<div id="origin"></div>
+</div>
+
+<div class="small">
+<div class="label">דת</div>
+<div id="religion"></div>
+</div>
+
+<div class="small">
+<div class="label">טלפון</div>
+<div id="phone"></div>
+</div>
+</div>
+
+</div>
+</div>
+
 </div>
 
 <script>
@@ -186,9 +240,9 @@ async function loadMyProfile(){
 const { data:{ user } } = await window.supabaseClient.auth.getUser();
 
 if(!user){
- alert("אין משתמש מחובר");
- location.href="index.html";
- return;
+alert("אין משתמש מחובר");
+location.href="index.html";
+return;
 }
 
 const { data,error } = await window.supabaseClient
@@ -198,18 +252,32 @@ const { data,error } = await window.supabaseClient
 .maybeSingle();
 
 if(error || !data){
- alert("לא נמצא פרופיל");
- location.href="infouser1.html";
- return;
+alert("לא נמצא פרופיל");
+location.href="infouser1.html";
+return;
 }
 
-showProfile(data);
+fillData(data);
 
 }
 
 
 
-function showProfile(user){
+function fillData(user){
+
+const imgs = Array.isArray(user.images) ? user.images : [];
+const img = imgs.length ? imgs[0] : "https://via.placeholder.com/600x400?text=No+Image";
+
+/* מצב אינדקס */
+document.getElementById("miniImage").src = img;
+document.getElementById("miniName").innerText =
+`${user.first_name || ""} · ${user.age || ""}`;
+
+document.getElementById("miniMeta").innerText =
+`${user.city || ""} ${user.religion ? "· "+user.religion : ""}`;
+
+/* מצב פתוח */
+document.getElementById("mainImage").src = img;
 
 document.getElementById("name").innerText =
 `${user.first_name || ""} ${user.last_name || ""} · ${user.age || ""}`;
@@ -223,11 +291,24 @@ document.getElementById("origin").innerText = user.origin || "-";
 document.getElementById("religion").innerText = user.religion || "-";
 document.getElementById("phone").innerText = user.phone || "-";
 
-const imgs = Array.isArray(user.images) ? user.images : [];
+}
 
-document.getElementById("mainImage").src =
-imgs.length ? imgs[0] : "https://via.placeholder.com/600x400?text=No+Image";
 
+
+function showMini(){
+document.getElementById("miniCard").style.display="block";
+document.getElementById("fullCard").style.display="none";
+
+document.getElementById("btnMini").classList.add("active");
+document.getElementById("btnFull").classList.remove("active");
+}
+
+function showFull(){
+document.getElementById("miniCard").style.display="none";
+document.getElementById("fullCard").style.display="block";
+
+document.getElementById("btnFull").classList.add("active");
+document.getElementById("btnMini").classList.remove("active");
 }
 </script>
 
