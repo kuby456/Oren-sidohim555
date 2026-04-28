@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>פרופיל</title>
+  <link href__="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0;  
+       -webkit-tap-highlight-color: transparent;
+}
+
+html, body{
+  margin:0;
+  padding:0;
+  overflow-x:hidden;
+}
+    body {
+      min-height: 100vh;
+      background: linear-gradient(110deg, #1a0533 0%, #6a4c85 50%, #1a0533 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Heebo', sans-serif;
+      padding: 24px;
+
+    }
+
+    .profile {
+      width: 420px;
+      background: #ffffff6f;
+border-top-left-radius: 30px;    
+border-top-right-radius: 30px;      
+overflow: hidden;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.45), 0 8px 24px rgba(0,0,0,0.2);
+
+    }
+
+    /* ───── תמונה ראשית ───── */
+    .photo-wrap {
+      position: relative;
+      height: 420px;
+    }
+
+    .main-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top;
+      display: block;
+    }
+
+    .photo-overlay {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 55%;
+      background: linear-gradient(to top, rgba(20,0,40,0.92) 0%, transparent 100%);
+      pointer-events: none;
+    }
+
+    .photo-info {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      left: 20px;
+      color: #fff;
+    }
+
+    .name {
+      font-size: 28px;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: 0.3px;
+    }
+
+    .meta {
+      font-size: 14px;
+      font-weight: 400;
+      color: rgba(255,255,255,0.75);
+      margin-top: 5px;
+    }
+
+    /* ───── גלריה ───── */
+    .gallery {
+      display: flex;
+      gap: 6px;
+      padding: 12px 16px;
+      background: #0000009f;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .gallery::-webkit-scrollbar { display: none; }
+    body::-webkit-scrollbar { display: none; }
+
+    .gallery img {
+      width: 64px;
+      height: 64px;
+      object-fit: cover;
+      border-radius: 12px;
+      flex-shrink: 0;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: border-color 0.2s, transform 0.15s;
+    }
+
+    .gallery img:hover { border-color: #9b3fc8; transform: scale(1.06); }
+    .gallery img.active { border-color: #9b3fc8; }
+
+    /* ───── גוף הכרטיס ───── */
+    .body {
+      padding: 20px 22px 26px;
+    }
+
+    /* about */
+    .about-box {
+      background: #f9f5ff;
+      border-right: 8px solid #1eb2d7;
+      border-radius: 0 18px 18px 0;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+      font-size: 14.5px;
+      color: #5e21a8;
+      line-height: 1.7;
+    }
+
+    /* פרטים */
+    .details-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .section {
+      background: #faf8ff;
+      border: 1px solid #ede5f8;
+      border-radius: 14px;
+      padding: 12px 14px;
+    }
+
+    .label {
+      font-size: 10px;
+      font-weight: 700;
+      color: #a070cc;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+
+    .value {
+      font-size: 15px;
+      font-weight: 600;
+      color: #1e0840;
+    }
+
+    /* טלפון */
+    .phone-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: linear-gradient(135deg, #383738, #515251, #3a3a3a);
+      border-radius: 16px;
+      padding: 14px 18px;
+      color: #fff;
+    }
+
+    .phone-icon {
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    .phone-label {
+      font-size: 11px;
+      font-weight: 600;
+      opacity: 0.75;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+    }
+
+    .phone-value {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+    }
+    .night12 {
+      position: fixed;
+      z-index: -1;
+      width: 100%;
+      top: 0;
+      left: 0;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="night12">
+  </div>
+<div class="profile">
+
+  <!-- תמונה ראשית -->
+  <div class="photo-wrap">
+    <img id="mainImage" class="main-img"/>
+    <div class="photo-overlay"></div>
+    <div class="photo-info">
+      <div class="name" id="name"></div>
+      <div class="meta" id="meta"></div>
+    </div>
+  </div>
+
+  <!-- גלריה -->
+  <div class="gallery" id="gallery"></div>
+
+  <!-- גוף -->
+  <div class="body">
+
+    <!-- קצת עליי -->
+    <div class="about-box" id="about"></div>
+    <!-- פרטים -->
+    <div class="details-grid">
+      <div class="section">
+        <div class="label">מוצא</div>
+        <div class="value" id="origin"></div>
+      </div>
+      <div class="section">
+        <div class="label">גובה</div>
+        <div class="value" id="height"></div>
+      </div>
+      <div class="section">
+        <div class="label">רמה דתית</div>
+        <div class="value" id="religion"></div>
+      </div>
+    </div>
+
+    <!-- טלפון -->
+    <div class="phone-row">
+      <div class="phone-icon">📞</div>
+      <div>
+        <div class="phone-label">ליצירת קשר</div>
+        <div class="phone-value" id="phone"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const supabaseClient = supabase.createClient(
+    "https://gpdkkjvppcsyqcdfbfyd.supabase.co",
+    "sb_publishable_f5nIFbWwsTLCroOegC8vmw_WTxoEeeA"
+  );
+
+  const params = new URLSearchParams(window.location.search);
+  const userId = params.get("id");
+
+  if (!userId) {
+    alert("אין מזהה פרופיל");
+    window.location.href = "index.html";
+  }
+
+  loadProfile();
+
+  async function loadProfile() {
+    const { data, error } = await supabaseClient
+      .from("profiles")
+      .select("*")
+      .eq("id", userId)
+      .limit(1);
+
+    if (error || !data || data.length === 0) {
+      alert("לא נמצא פרופיל");
+      return;
+    }
+
+    const user = data[0];
+
+    document.getElementById("name").innerText =
+      `${user.first_name || ""} ${user.last_name || ""} · ${user.age || ""}`;
+
+    document.getElementById("meta").innerText =
+      `${user.city || ""} · ${user.religion || ""}`;
+
+    document.getElementById("origin").innerText = user.origin || "-";
+    document.getElementById("height").innerText = user.height ? user.height + " ס״מ" : "-";
+    document.getElementById("religion").innerText = user.religion || "-";
+    document.getElementById("about").innerText = user.about || "-";
+    document.getElementById("phone").innerText = user.phone || "-";
+
+    const images = Array.isArray(user.images) ? user.images : [];
+    const mainImage = document.getElementById("mainImage");
+
+    mainImage.src = images.length > 0
+      ? images[0]
+      : "https://via.placeholder.com/600x400?text=No+Image";
+
+    const gallery = document.getElementById("gallery");
+    gallery.innerHTML = "";
+
+    images.forEach((img, index) => {
+      const el = document.createElement("img");
+      el.src = img;
+      if (index === 0) el.classList.add("active");
+      el.onclick = () => {
+        mainImage.src = img;
+        document.querySelectorAll(".gallery img").forEach(i => i.classList.remove("active"));
+        el.classList.add("active");
+      };
+      gallery.appendChild(el);
+    });
+  }
+</script>
+
+</body>
+</html>
