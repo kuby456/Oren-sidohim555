@@ -39,11 +39,13 @@
     .topbar-top {
 display: flex;
   align-items: center;
-      
   
- 
 }
 
+
+.page {
+  margin: 20px;
+}
     .menu-btn {
       background: rgba(255,255,255,0.14);
       border: 1px solid rgba(255,255,255,0.25);
@@ -122,137 +124,6 @@ display: flex;
       background: #e7d4c4;
     }
 
-    /* שכבה כהה */
-    .overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.35);
-      z-index: 1500;
-      display: none;
-    }
-
-    .overlay.show {
-      display: block;
-    }
-
-    /* כרטיסים - אחד מתחת לשני */
-    .cards {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 14px;
-      margin: 20px 0 0;
-    }
-
-    .card {
-      background: white;
-      border-radius: 0px;
-      overflow: hidden;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
-      border: 1px solid #eee2d8;
-      position: relative;
-      
-    }
-
-    .card-img {
-      width: 100px;
-      height: 100px;
-      background: linear-gradient(135deg, #d9b8a0, #f2dfcf, #cda98b);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 50px;
-    }
-
-    
-
-    .card-name {
-      font-size: 22px;
-      font-weight: bold;
-      color: #4d2a2a;
-      margin-bottom: 6px;
-    }
-
-    .card-meta {
-      font-size: 14px;
-      color: #6d6d6d;
-      margin-bottom: 10px;
-      
-    }
-
-    .card-text {
-      font-size: 15px;
-      line-height: 1.6;
-      margin-bottom: 14px;
-      color: #333;
-    }
-  
-    .btn {
-      flex: 1;
-      border: none;
-      padding: 12px;
-      border-radius: 12px;
-      font-size: 15px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .btn-main {
-      background: #7a4343;
-      color: white;
-    }
-
-    .btn-light {
-      background: #efe3d8;
-      color: #5c3434;
-    }
-  
-  .topbar-icons {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: 8px 0 12px;
-}
-
-.icon {
-  width: 22px;
-  height: 22px;
-  fill: white;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.icon:hover {
-  transform: scale(1.15);
-  opacity: 0.8;
-}
-  
-  .saveBtn {
-  font-size: 24px;
-  cursor: pointer;
-  color: #bbb;
-  transition: 0.3s;
-    position: absolute;
-    left: 10px; top: 8px;
-}
-
-.saveBtn.active {
-  color: red;
-  transform: scale(1.2);
-}
-  
-  .saveBtn {
-  outline: none;
-  -webkit-tap-highlight-color: transparent;
-  user-select: none;
-}
-
-.saveBtn:focus {
-  outline: none;
-}
-
-.saveBtn:active {
-  outline: none;
-}
   
   .google-btn {
   width: 45px;
@@ -341,6 +212,182 @@ display: flex;
   transform: scale(1);
   opacity: 1;
 }
+.cards {
+ display:grid;
+grid-template-columns:1fr 1fr;
+gap:14px;
+}
+
+.card {
+  position: relative;
+  width: 150px;
+  height: 300px;
+  aspect-ratio: 3/4;
+  border-radius: 24px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  transition: transform 0.3s ease;
+ 
+}
+.card:hover { transform: translateY(-4px) scale(1.01); }
+
+/* תמונה */
+.card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.3s;
+}
+
+/* כפתורי ניווט תמונות */
+.nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  background: rgba(0,0,0,0.3);
+  backdrop-filter: blur(4px);
+  border: none;
+  border-radius: 50%;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.card:hover .nav-btn { opacity: 1; }
+.nav-left { left: 8px; }
+.nav-right { right: 8px; }
+
+/* נקודות */
+.dots {
+  position: absolute;
+  top: 12px;
+  left: 0; right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+}
+.dot {
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255,255,255,0.5);
+  transition: all 0.3s;
+}
+.dot.active { width: 24px; background: white; }
+.dot.inactive { width: 8px; }
+
+/* badge התאמה */
+.match-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(4px);
+  border-radius: 999px;
+  padding: 4px 10px;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* גרדיאנט */
+.gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.05) 50%, transparent 100%);
+  pointer-events: none;
+}
+
+/* מידע */
+.card-info {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 20px;
+  color: white;
+}
+.name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.name-row h3 { font-size: 22px; font-weight: 700; }
+.age { font-size: 18px; opacity: 0.8; }
+.verified {
+  width: 20px; height: 20px;
+  background: #e91e8c;
+  border-radius: 50%;
+  font-size: 11px;
+  display: flex; align-items: center; justify-content: center;
+}
+.location { font-size: 13px; opacity: 0.7; margin-bottom: 12px; }
+
+/* תגיות */
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+.tag {
+  font-size: 12px;
+  color: rgba(255,255,255,0.9);
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(4px);
+  border-radius: 999px;
+  padding: 2px 10px;
+}
+
+/* כפתורי פעולה */
+.actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+}
+.btn-pass, .btn-like, .btn-star {
+  border: none;
+  cursor: pointer;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  transition: transform 0.2s;
+}
+.btn-pass {
+  width: 30px; 
+  height: 30px;
+  padding: 10px;
+  background: rgba(255,255,255,0.2);
+  color: white;
+    font-size: 15px;
+}
+.btn-like {
+width: 40px; 
+  height: 40px;
+    padding: 20px;
+  background: linear-gradient(135deg, #e91e8c, #9c27b0);
+  color: white;
+  box-shadow: 0 8px 24px rgba(233,30,140,0.4);
+}
+.btn-star {
+ width: 30px; 
+  height: 30px;
+    padding: 10px;
+  background: rgba(255,255,255,0.2);
+  color: #facc15;
+    font-size: 15px;
+
+}
+
+.btn-pass:hover, .btn-like:hover, .btn-star:hover { transform: scale(1.1); }
+.btn-like.liked { transform: scale(1.25); background: #e91e8c; }
+.btn-pass.passed { background: #ef4444; transform: scale(1.1); }
   </style>
 </head>
 <body>
@@ -410,6 +457,8 @@ display: flex;
     </div>
   </div>
 </div>
+
+
 <script>
 const script = document.createElement("script");
 script.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
@@ -578,24 +627,49 @@ async function goToProfile() {
     card.className = "card";
 
     card.innerHTML = `
-     <div class="card-img">
-  ${
-    Array.isArray(user.images) && user.images[0]
-      ? `<img src="${user.images[0]}" style="width:100%;height:100%;object-fit:cover">`
-      : "👤"
-  }
+
+${
+Array.isArray(user.images) && user.images[0]
+? `<img class="card-img" src="${user.images[0]}">`
+: `<div class="card-img">👤</div>`
+}
+
+<div class="dots">
+<span class="dot active"></span>
+<span class="dot inactive"></span>
 </div>
 
-      <div class="card-body">
-        <i class="saveBtn fa-regular fa-heart"></i>  
+<div class="match-badge">
+<span>התאמה</span>
+</div>
 
-        <div style="position: absolute; left: 0; top: 20px; text-align: center; margin-left: 40px;">
-          <div class="card-name">${user.first_name} · ${user.age}</div>
-          <div class="card-meta">${user.city || ""} · ${user.religion || ""}</div>
-        </div>
-      </div>
-    `;
+<div class="gradient"></div>
 
+<div class="card-info">
+
+<div class="name-row">
+<h3>${user.first_name || ""}</h3>
+<span class="age">${user.age || ""}</span>
+</div>
+
+<div class="location">
+${user.city || ""}
+</div>
+
+<div class="tags">
+<span class="tag">${user.religion || ""}</span>
+<span class="tag">${user.eda || ""}</span>
+<span class="tag">${user.status || ""}</span>
+</div>
+
+<div class="actions">
+<button class="btn-pass">✕</button>
+<button class="btn-like">♥</button>
+<button class="btn-star">★</button>
+</div>
+
+</div>
+`;
     // מעבר לפרופיל
     card.onclick = () => {
       window.location.href = `profiles1.html?id=${user.id}`;
