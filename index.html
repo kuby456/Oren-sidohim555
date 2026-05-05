@@ -39,9 +39,7 @@
     .topbar-top {
 display: flex;
   align-items: center;
-      
-  
- 
+    
 }
 
     .menu-btn {
@@ -60,9 +58,7 @@ display: flex;
   user-select: none;
     }
 
-   
-
-    
+  
     /* סרגל צד */
     .sidebar {
       position: fixed;
@@ -135,56 +131,6 @@ display: flex;
       display: block;
     }
 
-    /* כרטיסים - אחד מתחת לשני */
-    .cards {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 14px;
-      margin: 20px 0 0;
-    }
-
-    .card {
-      background: white;
-      border-radius: 0px;
-      overflow: hidden;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
-      border: 1px solid #eee2d8;
-      position: relative;
-      
-    }
-
-    .card-img {
-      width: 100px;
-      height: 100px;
-      background: linear-gradient(135deg, #d9b8a0, #f2dfcf, #cda98b);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 50px;
-    }
-
-    
-
-    .card-name {
-      font-size: 22px;
-      font-weight: bold;
-      color: #4d2a2a;
-      margin-bottom: 6px;
-    }
-
-    .card-meta {
-      font-size: 14px;
-      color: #6d6d6d;
-      margin-bottom: 10px;
-      
-    }
-
-    .card-text {
-      font-size: 15px;
-      line-height: 1.6;
-      margin-bottom: 14px;
-      color: #333;
-    }
   
     .btn {
       flex: 1;
@@ -226,14 +172,7 @@ display: flex;
   opacity: 0.8;
 }
   
-  .saveBtn {
-  font-size: 24px;
-  cursor: pointer;
-  color: #bbb;
-  transition: 0.3s;
-    position: absolute;
-    left: 10px; top: 8px;
-}
+
 
 .saveBtn.active {
   color: red;
@@ -341,6 +280,80 @@ display: flex;
   transform: scale(1);
   opacity: 1;
 }
+
+.card {
+  position: relative;
+  width: 150px;
+  height: 200px;
+  border-radius: 13px;
+  overflow: hidden;
+  box-shadow: 0 12px 35px rgba(0,0,0,0.25);
+}
+
+/* תמונה */
+.card-img img,
+.card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* overlay */
+.card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,0.95) 0%,
+    rgba(0,0,0,0.75) 25%,
+    rgba(0,0,0,0.4) 50%,
+    rgba(0,0,0,0.15) 70%,
+    transparent 100%
+  );
+}
+
+ .cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin: 20px 15px 10px;
+    }
+    
+/* טקסט */
+.card-body {
+  position: absolute;
+  bottom: 0;
+  padding: 10px;
+  color: white;
+  text-align: right;
+  width: 100%;
+}
+
+.card-name,
+.card-meta,
+.card-status {
+  margin: 0 0 4px;
+  word-break: break-word;
+  line-height: 1.2;
+}
+
+/* לב */
+.saveBtn {
+  position: absolute;
+  left: 10px;
+  bottom: 15px;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: none;
+  background: white;
+  color: #e11d48;
+  font-size: 22px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
   </style>
 </head>
 <body>
@@ -410,6 +423,7 @@ display: flex;
     </div>
   </div>
 </div>
+
 <script>
 const script = document.createElement("script");
 script.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
@@ -578,23 +592,26 @@ async function goToProfile() {
     card.className = "card";
 
     card.innerHTML = `
-     <div class="card-img">
-  ${
-    Array.isArray(user.images) && user.images[0]
-      ? `<img src="${user.images[0]}" style="width:100%;height:100%;object-fit:cover">`
-      : "👤"
-  }
-</div>
 
-      <div class="card-body">
-        <i class="saveBtn fa-regular fa-heart"></i>  
+  <div class="card-img">
+    ${
+      Array.isArray(user.images) && user.images[0]
+        ? `<img src="${user.images[0]}">`
+        : "👤"
+    }
+  </div>
 
-        <div style="position: absolute; left: 0; top: 20px; text-align: center; margin-left: 40px;">
-          <div class="card-name">${user.first_name} · ${user.age}</div>
-          <div class="card-meta">${user.city || ""} · ${user.religion || ""}</div>
-        </div>
-      </div>
-    `;
+  <div class="card-overlay"></div>
+
+  <div class="card-body">
+    <div class="card-name">${user.first_name} · ${user.age}</div>
+    <div class="card-meta">${user.area || ""}</div>
+    <div class="card-status">${user.status || ""}</div>
+
+    <i class="saveBtn fa-regular fa-heart"></i>
+  </div>
+
+`;
 
     // מעבר לפרופיל
     card.onclick = () => {
@@ -603,6 +620,8 @@ async function goToProfile() {
 
     container.appendChild(card);
   });
+
+  
 document.querySelectorAll(".saveBtn").forEach(heart => {
   heart.addEventListener("click", (e) => {
     e.stopPropagation();
