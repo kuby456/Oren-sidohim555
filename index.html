@@ -332,16 +332,47 @@ display: flex;
 .card-name,
 .card-meta,
 .card-status {
-  margin: 0 0 4px;
+  margin: 0 5px 4px;
   word-break: break-word;
   line-height: 1.2;
+display: flex;
+justify-content: center;
+
+
+}
+
+.card-name,
+.card-meta{
+  margin-right: 10px;
+  justify-content: right;
+
+}
+
+.card-meta{
+color: #a1f9de;
+
+}
+
+.card-status {
+  background: rgba(59, 59, 175, 0.737);
+  padding: 3px;
+  border-radius: 10px;
+  font-size: 12px;
+  margin-top: 13px;
+}
+
+.card-name {
+  font-weight: bolder;
+  font-size: 20px;
+  display: flex;
+  justify-content: right;
 }
 
 /* לב */
 .saveBtn {
   position: absolute;
-  left: 10px;
-  bottom: 15px;
+  left: 13px;
+  top: 15px;
   width: 38px;
   height: 38px;
   border-radius: 50%;
@@ -353,6 +384,15 @@ display: flex;
   justify-content: center;
   align-items: center;
 }
+
+.line{
+  width:3px;
+  height:50px;
+  background:rgba(243, 243, 243, 0.5);
+  position: absolute;
+  right: 10px;
+}
+
 
   </style>
 </head>
@@ -604,8 +644,11 @@ async function goToProfile() {
   <div class="card-overlay"></div>
 
   <div class="card-body">
+    <div class-"line1">
+          <div class="line"></div>
     <div class="card-name">${user.first_name} · ${user.age}</div>
     <div class="card-meta">${user.area || ""}</div>
+    </div>
     <div class="card-status">${user.status || ""}</div>
 
     <i class="saveBtn fa-regular fa-heart"></i>
